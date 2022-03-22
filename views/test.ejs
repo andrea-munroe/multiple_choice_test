@@ -13,19 +13,22 @@
 
 <body>
 	<h1>The Test</h1>
+	
+		<h2>Answer These <%= questions.length %> questions</h2>
 
-	<h2>Answer This</h2>
-	<%= questions.length %>
+		<div class="question-container">
+			<% for ( let question of questions) { %>
+				<div class="question-card">
 
-	<% for ( let question of questions) { %>
-	<h3><%= question.question %></h3>
+					<h3><%= question.question %></h3>
+					<% question.answers.forEach(elm => { %>
+						<input type="radio" name="<%= question.question %>" id="<%= elm %>" value="<%= elm %>">
+						<label for="<%= elm %>"><%= elm %></label>
+					<% }) %>
 
-	<% question.answers.forEach(elm => { %>
-	<input type="radio" name="<%= question.question %>" id="<%= elm %>" value="<%= elm %>">
-	<label for="<%= elm %>"><%= elm %></label>
-	<% }) %>
-
-	<% } %>
+				</div>
+			<% } %>
+		</div>
 
 </body>
 

@@ -91,6 +91,17 @@ nav a {
   border-radius: 0.5em;
 }
 
+.question-card {
+  padding-block: 2rem;
+  padding-left: 2rem;
+}
+.question-card h3 {
+  padding-bottom: 1rem;
+}
+.question-card:nth-of-type(odd) {
+  background-color: aliceblue;
+}
+
 .container {
   display: flex;
   flex-basis: 100%;

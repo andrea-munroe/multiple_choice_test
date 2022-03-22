@@ -1,0 +1,11 @@
+.question-card {
+	padding-block: 2rem;
+	padding-left: 2rem;
+	h3 {
+		padding-bottom: 1rem;
+	}
+
+	&:nth-of-type(odd) {
+		background-color: aliceblue;
+	}
+}
