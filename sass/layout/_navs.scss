@@ -1,0 +1,15 @@
+nav {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	background-color: rgb(85, 201, 255);
+	height: 30vh;
+	width: 100%;
+
+	a {
+		padding-inline: 3rem;
+		padding-block: 1rem;
+		background-color: antiquewhite;
+		border-radius: .5em;
+	}
+}
