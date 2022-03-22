@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>The Test</title>
+</head>
+
+<body>
+	<h1>The Test</h1>
+
+	<h2>Answer This</h2>
+	<%= questions.length %>
+
+	<% for ( let question of questions) { %>
+	<h3><%= question.question %></h3>
+
+	<% question.answers.forEach(elm => { %>
+	<input type="radio" name="<%= question.question %>" id="<%= elm %>" value="<%= elm %>">
+	<label for="<%= elm %>"><%= elm %></label>
+	<% }) %>
+
+	<% } %>
+
+</body>
+
+</html>

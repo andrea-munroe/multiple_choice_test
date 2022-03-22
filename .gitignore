@@ -1,0 +1,10 @@
+.env
+/node_modules/
+.nova/
+.vscode/
+*.DS_Store
+*.xd
+*.sketch
+*.fig
+prepros.config
+package-lock.json
