@@ -18,9 +18,6 @@ app.set( 'view engine', 'ejs' );
 app.use(express.static(path.join(__dirname, 'public')))
 app.use( express.static( path.join( __dirname, '/views' ) ) )
 
-// app.get( '/', ( req, res ) => {
-// 	res.render( 'index', { question: "frank" } )
-// } )
 
 app.get( '/', ( req, res ) => {
 	res.render('index')
@@ -30,10 +27,6 @@ app.get( '/test', ( req, res ) => {
 	pool.query( 'SELECT * FROM test', ( error, result ) => {
 		if ( error ) throw error
 		res.render( 'test', { questions: result.rows } )
-		// for ( let question of result.rows ) {
-		// 	console.log( question.question )
-		// 	question.answers.forEach( elm => console.log( elm ) )
-		// }
 	} )
 } )
 
