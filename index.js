@@ -26,7 +26,8 @@ app.get( '/', ( req, res ) => {
 app.get( '/test', ( req, res ) => {
 	pool.query( 'SELECT * FROM test', ( error, result ) => {
 		if ( error ) throw error
-		res.render( 'test', { questions: result.rows } )
+		// console.log(result.rows[0].questions)
+		res.render( 'test', { test: result.rows } )
 	} )
 } )
 
