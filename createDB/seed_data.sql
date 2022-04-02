@@ -35,7 +35,7 @@ DELETE FROM scores
 
 INSERT INTO
     scores (student_name, score)
-VALUES ()
+VALUES
     ('Jar Jar Binks', 10),
     ('Tony Stark', 100),
     ('Agent Smith', 85)
