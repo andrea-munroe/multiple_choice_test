@@ -1,4 +1,4 @@
-Drop table questions
+DROP TABLE questions
 
 CREATE TABLE
     questions (
@@ -12,6 +12,8 @@ CREATE TABLE
         answers text NOT NULL,
         FOREIGN KEY (q_id) REFERENCES questions(question) ON DELETE CASCADE
     );
+
+DROP TABLE scores
 
 CREATE TABLE
     scores (

@@ -31,14 +31,17 @@ app.get( '/test', ( req, res ) => {
 	} )
 } )
 
-app.get( '/edit', ( req, res ) => {
-	pool.query( 'SELECT * FROM test', ( error, result ) => {
-		if ( error ) throw error
-		// console.log(result.rows[0].questions)
-		res.render( 'edit', { test: result.rows } )
-	} )
-} )
+// app.get( '/edit', ( req, res ) => {
+// 	pool.query( 'SELECT * FROM test', ( error, result ) => {
+// 		if ( error ) throw error
+// 		// console.log(result.rows[0].questions)
+// 		res.render( 'edit', { test: result.rows } )
+// 	} )
+// } )
 
+app.all('*', (req, res) => {
+	res.render('index')
+});
 
 const port = process.env.PORT || 3000;
 app.listen( port, () => {
