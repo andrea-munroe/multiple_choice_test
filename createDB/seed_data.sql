@@ -1,10 +1,31 @@
-DELETE from test;
+DELETE FROM questions;
 
 INSERT INTO
-    test (question, answers)
-VALUES 
-    ('how long is a yard in feet?', ARRAY ['3 feet','6 feet','20 feet']),
-    ('how many quarts of oil can a race car hold?', ARRAY ['3 quarts','1 gallon','5 cups']),
-    ('how tall is the hulk?', ARRAY ['8 feet','10 feet','6.5 feet']),
-    ('what is inductance?', ARRAY ['magic','alternating current resistance','being honored by an organization']),
-    ('how fast can a frog hop?', ARRAY ['4 hops a minute.', '6 hops a minute', '20 hops a minute']);
+    questions (question, answer)
+VALUES
+    ('how long is a yard in feet?','3 feet'),
+    ('how many quarts of oil can a race car hold?','1 gallon'),
+    ('how tall is the hulk?','10 feet'),
+    ('what is inductance?','alternating current resistance'),
+    ('how fast can a frog hop?','alternating current resistance');
+
+DELETE FROM answers
+
+INSERT INTO
+    answers (q_id, answers)
+VALUES
+    ('how long is a yard in feet?', '3 feet'),
+    ('how long is a yard in feet?', '6 feet'),
+    ('how long is a yard in feet?', '20 feet'),
+    ('how many quarts of oil can a race car hold?', '3 quarts'),
+    ('how many quarts of oil can a race car hold?', '1 gallon'),
+    ('how many quarts of oil can a race car hold?', '5 cups'),
+    ('how tall is the hulk?', '8 feet'),
+    ('how tall is the hulk?', '10 feet'),
+    ('how tall is the hulk?', '6.5 feet'),
+    ('what is inductance?', 'magic'),
+    ('what is inductance?', 'alternating current resistance'),
+    ('what is inductance?', 'being honored by an organization'),
+    ('how fast can a frog hop?', 'alternating current resistance'),
+    ('how fast can a frog hop?', '6 hops a minute'),
+    ('how fast can a frog hop?', '20 hops a minute');
