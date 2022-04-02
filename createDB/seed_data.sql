@@ -29,3 +29,13 @@ VALUES
     ('how fast can a frog hop?', 'alternating current resistance'),
     ('how fast can a frog hop?', '6 hops a minute'),
     ('how fast can a frog hop?', '20 hops a minute');
+
+
+DELETE FROM scores
+
+INSERT INTO
+    scores (student_name, score)
+VALUES ()
+    ('Jar Jar Binks', 10),
+    ('Tony Stark', 100),
+    ('Agent Smith', 85)
