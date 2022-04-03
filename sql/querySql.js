@@ -1,9 +1,13 @@
+// use .env environment variables
+if (process.env.NODE_ENV !== "production") {
+	require('dotenv').config();
+};
+
 // sql module imports
 const { Pool, Client } = require('pg')
 const format = require('pg-format');
 
 const pool = new Pool()
-
 
 // function to query database
 const querySql = (sql, callback) => {

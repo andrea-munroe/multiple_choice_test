@@ -91,6 +91,14 @@ nav a {
   border-radius: 0.5em;
 }
 
+.nav-container {
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
 .question-card {
   padding-block: 2rem;
   padding-left: 2rem;
@@ -102,12 +110,8 @@ nav a {
   background-color: aliceblue;
 }
 
-.container {
-  display: flex;
-  flex-basis: 100%;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
+.modal {
+  padding: 1em;
 }
 
 /*# sourceMappingURL=style.css.map */

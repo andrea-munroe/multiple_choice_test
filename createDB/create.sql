@@ -1,9 +1,11 @@
-DROP TABLE questions
+DROP TABLE IF EXISTS answers;
+DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS scores;
 
 CREATE TABLE
     questions (
         question text PRIMARY KEY NOT NULL,
-        answer text NOT NULL
+        correct_answer text NOT NULL
     );
 
 CREATE TABLE
@@ -13,10 +15,8 @@ CREATE TABLE
         FOREIGN KEY (q_id) REFERENCES questions(question) ON DELETE CASCADE
     );
 
-DROP TABLE scores
-
 CREATE TABLE
     scores (
         student_name VARCHAR(50) NOT NULL,
         score INT NOT NULL CHECK (score <= 100 AND score >= 0)
-    )
+    );

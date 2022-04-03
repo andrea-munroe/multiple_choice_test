@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="/css/style.css">
+
+	<title>The Test</title>
+</head>
+
+<body>
+	<dialog class="modal" id="name-modal">
+		<h2>Enter Name</h2>
+		<form class="form" action="/test" method="post">
+			<label>name <input type="text"></label>
+			<button class="btn" id="modalClose" type="submit">submit</button>
+		</form>
+	</dialog>
+
+	<h1>The Test</h1>
+
+	<h2>Answer These <%= test.length %> test</h2>
+
+	<div class="question-container">
+		<% for ( let question of test) { %>
+		<div class="question-card">
+
+			<form action="">
+				<h3><%= question.questions %></h3>
+
+				<% question.answers.forEach(elm => { %>
+					<input type="radio" name="<%= question.question %>" id="<%= elm %>" value="<%= elm %>">
+					<label for="<%= elm %>"><%= elm %></label>
+				<% }) %>
+		</div>
+		<% } %>
+		
+		<button class="btn">submit</button>
+		</form>
+	</div>
+
+</body>
+
+</html>

@@ -9,23 +9,15 @@
 	<title>Test</title>
 
 	<link rel="stylesheet" href="/css/style.css">
-	<script src="/javascripts/name-modal.js" defer></script>
+	<!-- <script src="/javascripts/name-modal.js" defer></script> -->
 
 </head>
 
 <body>
-	<dialog class="modal" id="name-modal">
-		<h2>Enter Name</h2>
-		<form class="form" action="/test" method="post">
-			<label>name <input type="text"></label>
-			<button class="btn" id="modalClose" type="submit">submit</button>
-		</form>
-	</dialog>
-
-	<div class="container">
+	<div class="nav-container">
 		<nav>
 			<a class="btn" id="teacher-btn" href="/edit">Teacher</a>
-			<a class="btn" id="student-btn" href="#">Student</a>
+			<a class="btn" id="student-btn" href="/test">Student</a>
 		</nav>
 	</div>
 </body>

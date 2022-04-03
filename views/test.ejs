@@ -14,25 +14,19 @@
 <body>
 	<h1>The Test</h1>
 
-	<h2>Answer These <%= test.length %> test</h2>
-
-	<div class="question-container">
-		<% for ( let question of test) { %>
-		<div class="question-card">
-
-			<form action="">
-				<h3><%= question.questions %></h3>
-
-				<% question.answers.forEach(elm => { %>
-				<input type="radio" name="<%= question.question %>" id="<%= elm %>" value="<%= elm %>">
-				<label for="<%= elm %>"><%= elm %></label>
-				<% }) %>
-		</div>
-		<% } %>
-		<button class="btn">submit</button>
-		</form>
+	<h2>Answer These <%= questions.length %> questions</h2>
+	<% questions.forEach((elm) => { %>
+	<div class=".question-card">
+		<form action="">
+			<h3> <%= elm.question %> </h3>
+			<% elm.answers.forEach((answer) => { %>
+			<input type="radio" id="<%= answer %>" name="<%= elm.question %>">
+			<label for="<%= answer %>"> <%= answer %> </label>
+			<% }) %>
 	</div>
-
+	<% }) %>
+	<button class="btn">submit answers</button>
+	</form>
 </body>
 
 </html>
