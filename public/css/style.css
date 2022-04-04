@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
 /* Box sizing rules */
 *,
 *::before,
@@ -72,46 +73,87 @@ select {
     scroll-behavior: auto !important;
   }
 }
-body {
-  font-family: "Open Sans", sans-serif;
+*,
+*::before,
+*::after {
+  font-family: "Lato", sans-serif;
 }
 
-nav {
+.container_tall {
   display: flex;
-  justify-content: space-evenly;
   align-items: center;
-  background-color: #55c9ff;
-  height: 30vh;
-  width: 100%;
-}
-nav a {
-  padding-inline: 3rem;
-  padding-block: 1rem;
-  background-color: antiquewhite;
-  border-radius: 0.5em;
-}
-
-.nav-container {
-  display: flex;
-  flex-basis: 100%;
-  align-items: center;
-  width: 100vw;
+  justify-content: center;
   height: 100vh;
 }
 
-.question-card {
-  padding-block: 2rem;
-  padding-left: 2rem;
+.container {
+  margin: auto;
+  width: 80%;
 }
-.question-card h3 {
-  padding-bottom: 1rem;
+
+.questions {
+  margin-inline: auto;
+  margin-block: 1.5rem;
 }
-.question-card:nth-of-type(odd) {
+
+.question {
+  border: unset;
+  padding: 1.5rem;
+  text-transform: lowercase;
+}
+.question::first-letter {
+  text-transform: uppercase;
+}
+.question:nth-of-type(odd) {
   background-color: aliceblue;
 }
 
 .modal {
   padding: 1em;
+}
+
+.btn {
+  border: unset;
+  border-radius: 0.5em;
+  padding-inline: 1em;
+  padding-block: 0.5em;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in;
+}
+
+.btn:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.home-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1.5/1;
+  width: 40vw;
+  overflow: hidden;
+  border-radius: 1em;
+  background-color: #55c9ff;
+  color: white;
+}
+.home-card div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+.home-card div h3 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-transform: capitalize;
+}
+.home-card div .btn {
+  font-size: 2rem;
+}
+.home-card div:first-child {
+  background-color: #ff5555;
 }
 
 /*# sourceMappingURL=style.css.map */

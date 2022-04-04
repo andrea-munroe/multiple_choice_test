@@ -1,11 +1,18 @@
-.question-card {
-	padding-block: 2rem;
-	padding-left: 2rem;
-	h3 {
-		padding-bottom: 1rem;
-	}
+.questions {
+	margin-inline: auto;
+	margin-block: 1.5rem;
+}
 
-	&:nth-of-type(odd) {
-		background-color: aliceblue;
-	}
+.question {
+  border: unset;
+  padding: 1.5rem;
+  text-transform: lowercase;
+
+  &::first-letter {
+	  text-transform: uppercase;
+  }
+
+  &:nth-of-type(odd) {
+    background-color: aliceblue;
+  }
 }
