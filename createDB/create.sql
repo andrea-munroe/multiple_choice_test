@@ -10,10 +10,19 @@ CREATE TABLE
 
 CREATE TABLE
     answers (
-        q_id text NOT NULL,
+        q_id text NOT NULL PRIMARY KEY,
         answers text NOT NULL,
         FOREIGN KEY (q_id) REFERENCES questions(question) ON DELETE CASCADE
     );
+
+CREATE TABLE
+    test (
+        test_id SERIAL,
+        test_name VARCHAR(255)
+        question text
+        FOREIGN KEY (question) REFERENCES questions(question) ON DELETE CASCADE
+    )
+
 
 CREATE TABLE
     scores (
