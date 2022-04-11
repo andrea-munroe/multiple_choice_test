@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch:sass": "sass --watch sass:public/css"
+    "watch:sass": "sass --watch sass:public/css",
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
