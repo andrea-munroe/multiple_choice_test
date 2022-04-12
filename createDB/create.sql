@@ -28,8 +28,8 @@ CREATE TABLE
 CREATE TABLE 
     question_answers (
         quest_id SERIAL,
-        answer_text text NOT NULL,
-        PRIMARY KEY (quest_id, answer_text),
+        ans_id SERIAL,
+        PRIMARY KEY (quest_id, ans_id),
         FOREIGN KEY (quest_id) REFERENCES questions (quest_id) ON DELETE CASCADE
     ); 
 
