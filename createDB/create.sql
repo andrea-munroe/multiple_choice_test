@@ -3,12 +3,20 @@ DROP TABLE IF EXISTS test_questions;
 DROP TABLE IF EXISTS scores;
 DROP TABLE IF EXISTS tests;
 DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS answers;
 
+CREATE TABLE
+    answers (
+        ans_id SERIAL PRIMARY KEY,
+        ans_text text NOT NULL
+    );
 
 CREATE TABLE
     questions (
         quest_id SERIAL PRIMARY KEY,
-        quest_text text NOT NULL
+        quest_text text NOT NULL, 
+        correct_ans SERIAL,
+        FOREIGN KEY (correct_ans) REFERENCES answers (ans_id) ON DELETE CASCADE
     );
 
 CREATE TABLE
