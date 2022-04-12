@@ -2,6 +2,7 @@ nontrivial:
 
 quest_id -> quest_text
 test_id -> test_name
+ans_id -> ans_text
 
 trivial:
 
