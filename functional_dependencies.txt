@@ -1,0 +1,10 @@
+nontrivial:
+
+quest_id -> quest_text
+test_id -> test_name
+
+trivial:
+
+quest_id, answer_text -> answer_text
+quest_id, test_id -> test_id
+test_id, student_name, score -> student_name, score
