@@ -47,7 +47,7 @@ class Question {
     }
 
     editQuestion(question) {
-        if(question != "" || question != undefined) {
+        if(question != "" && question != undefined) {
             this.question = question;
         }
         else {
@@ -79,27 +79,3 @@ class Question {
         return this.answers[position]
     }
 }
-
-let question = new Question("This is a question.", 1, "Answer one", "Correct Answer", "Answer three", "Answer four")
-let trueFalse = new Question("Is this statment true?", 0, "True", "False")
-
-console.log(question)
-console.log(question.getCorrectPos() + " is the correct position")
-console.log(question.getQuestion() + " is the question")
-console.log(question.getAnswers() + " Is all the answers")
-console.log(question.getAnswers(1) + " is answer in position 1")
-question.addAnswer("This is a new answer!");
-console.log(question.getAnswers() + " Is all the answers. I just added a new one to the end!")
-question.deleteAnswer(2);
-console.log(question.getAnswers() + " Is all the answers. I just deleted the question in position 2!")
-question.deleteAnswer(4);
-console.log(question.getAnswers() + " Is all the answers. Nothing should have changed. Deleted out of bounds.")
-question.editQuestion("This is the new question description.")
-console.log(question.getQuestion() + " is the new question is it diffrent than before?")
-question.editQuestion()
-console.log(question.getQuestion() + " is the question. Nothing should have changed.")
-question.setCorrectAnswer(3);
-console.log(question.getCorrectPos() + " is the new correct position. Should be 3")
-question.editAnswer(1, "This is the new and improved answer 1.")
-console.log(question.getAnswers() + " Is all the answers. Answer 1 should be improved!")
-console.log(trueFalse.getAnswers() + " Should be a true and false question with only 2 places.")
