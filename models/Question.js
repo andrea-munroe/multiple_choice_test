@@ -1,6 +1,6 @@
 class Question {
     constructor(question) {
-        this.question = question;
+        this.setQuestion(question);
     }
 
     addAnswer(answer){
@@ -32,12 +32,13 @@ class Question {
         }
     }
 
-    editQuestion(question) {
+    setQuestion(question) {
         if(question != "" && question != undefined) {
             this.question = question;
         }
         else {
             console.log("Invalid string");
+            //raise an exception
         }
     }
 

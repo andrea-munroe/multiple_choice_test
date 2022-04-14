@@ -1,11 +1,17 @@
 class Test {
     constructor(name) {
-        this.name = name;
+        this.setName(name)
         this.questions = [];
     }
 
     setName(name) {
-        this.name = name;
+        if(name != "" && name != undefined) {
+            this.name = name;
+        }
+        else {
+            console.log("Invalid string");
+            //raise an exception
+        }
     }
 
     addQuestion(question) {
