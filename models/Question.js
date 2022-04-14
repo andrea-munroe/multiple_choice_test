@@ -1,6 +1,7 @@
 class Question {
     constructor(question) {
         this.setQuestion(question);
+        this.answers = [];
     }
 
     addAnswer(answer){

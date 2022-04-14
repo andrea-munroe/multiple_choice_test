@@ -1,5 +1,5 @@
 class Score {
-    constructor(name, score, testName) {
+    constructor(name, score = 0, testName) {
         this.setName(name);
         this.setScore(score);
         this.setTestName(testName);

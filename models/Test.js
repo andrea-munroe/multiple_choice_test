@@ -15,7 +15,13 @@ class Test {
     }
 
     addQuestion(question) {
-        this.question.push(question);
+        if(question != "" && question != undefined) {
+            this.questions.push(question);
+        }
+        else {
+            console.log("Invalid string");
+            //raise an exception
+        }
     }
 
     deleteQuestion(position) {

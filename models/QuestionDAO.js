@@ -32,7 +32,12 @@ class QuestionDAO {
     }
 
     updateQuestion() {
-
+        client.connect();
+        client.query('UPDATE question set', (error, results) =>
+        {
+            console.log(error ? error.stack : results.rows[0].message)
+        })
+        client.end();
     }
 
     deleteQuestion(id) {
