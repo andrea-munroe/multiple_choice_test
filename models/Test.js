@@ -2,6 +2,7 @@ class Test {
     constructor(name) {
         this.setName(name)
         this.questions = [];
+        this.id = 0; //This should match the id in the database. Im not sure how to set this up.
     }
 
     setName(name) {
@@ -46,5 +47,9 @@ class Test {
             console.log("position outside array");
             //raise an exception
         }
+    }
+
+    getId() {
+        return this.id;
     }
 }
