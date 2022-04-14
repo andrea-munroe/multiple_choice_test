@@ -1,8 +1,9 @@
 class Score {
-    constructor(name, score, testName) {
+    constructor(name, score = 0, testId) {
         this.setName(name);
         this.setScore(score);
-        this.setTestName(testName);
+        this.testId = testId;
+        //this.setTestName(testName);
     }
 
     setName(name) {
@@ -19,15 +20,15 @@ class Score {
         this.score = score;
     }
 
-    setTestName(testName) {
-        if(testName != "" && testName != undefined) {
-            this.testName = testName;
-        }
-        else {
-            console.log("Invalid string");
-            //raise an exception
-        }
-    }
+    // setTestName(testName) {
+    //     if(testName != "" && testName != undefined) {
+    //         this.testName = testName;
+    //     }
+    //     else {
+    //         console.log("Invalid string");
+    //         //raise an exception
+    //     }
+    // }
 
     getName() {
         return this.name;
@@ -37,7 +38,11 @@ class Score {
         return this.score;
     }
 
-    getTestName() {
-        return this.testName;
+    // getTestName() {
+    //     return this.testName;
+    // }
+
+    getTestId() {
+        return this.testId;
     }
 }

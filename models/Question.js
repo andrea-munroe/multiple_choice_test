@@ -1,6 +1,8 @@
 class Question {
     constructor(question) {
         this.setQuestion(question);
+        this.answers = [];
+        this.id = 0; //This should match the id in the database. Im not sure how to set this up.
     }
 
     addAnswer(answer){
@@ -66,5 +68,9 @@ class Question {
             console.log("position outside array")
             //raise an exception
         }
+    }
+
+    getId() {
+        return this.id;
     }
 }
