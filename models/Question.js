@@ -1,24 +1,10 @@
 class Question {
-    constructor(question, correctPos, answer1, answer2, answer3 = "", answer4 = "") {
-        this.question = question;
-        //raise an exception if answer1 || answer2 is undefiend
-        if(answer3 == "" && answer4 == "") {
-            this.answers = [answer1, answer2];
-        }
-        else if(answer3 != "" && answer4 == "") {
-            this.answers = [answer1, answer2, answer3];
-        }
-        else if(answer3 == "" && answer4 != "") {
-            this.answers = [answer1, answer2, answer4];
-        }
-        else {
-            this.answers = [answer1, answer2, answer3, answer4];
-        }
-        this.correctPos = correctPos;
+    constructor(question) {
+        this.setQuestion(question);
     }
 
     addAnswer(answer){
-        if(answer != "" || answer != undefined) {
+        if(answer != "" && answer != undefined) {
             this.answers.push(answer);
         }
         else {
@@ -46,12 +32,13 @@ class Question {
         }
     }
 
-    editQuestion(question) {
+    setQuestion(question) {
         if(question != "" && question != undefined) {
             this.question = question;
         }
         else {
             console.log("Invalid string");
+            //raise an exception
         }
     }
 
@@ -72,10 +59,12 @@ class Question {
         return this.question;
     }
 
-    getAnswers(position) {
-        if(position == undefined) {
-            return this.answers;
+    getAnswer(position) {
+        if(position < this.answers.length && position >= 0) {
+            return this.answers[position]
+        } else {
+            console.log("position outside array")
+            //raise an exception
         }
-        return this.answers[position]
     }
 }
