@@ -13,9 +13,21 @@ class Question {
             console.log("Invalid string");
         }
     }
+    
+    // for ease of seeding database, not sure if it'll be of any help to get all of them in the GUI but I figure it won't hurt
+    addAnswers(answers){
+        if(answers.length > 0){
+            for(let answer = 0; answer < answers.length; answer++){
+                this.addAnswer(answers[answer])
+            }
+        }
+        else{
+            console.log("Invalid answer array")
+        }
+    }
 
     deleteAnswer(position) {
-        if(this.answers.length < position && position >= 0) {
+        if(this.answers.length > position && position >= 0) {
             this.answers = this.answers.splice(position);
         }
         else {
@@ -25,7 +37,7 @@ class Question {
     }
 
     setCorrectAnswer(position) {
-        if(this.answers.length < position && position >= 0) {
+        if(this.answers.length > position && position >= 0) {
             this.correctPos = position;
         }
         else {
@@ -68,6 +80,15 @@ class Question {
             console.log("position outside array")
             //raise an exception
         }
+    }
+    //again, thought this might be useful for debugging, not sure if we'll need it for GUI but here it is
+    getAnswers() {
+        return this.answers;
+    }
+
+    //thought this might be useful, doesn't hurt anything
+    getCorrectAnswer() {
+        return this.getAnswer(this.getCorrectPos());
     }
 
     getId() {
