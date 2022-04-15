@@ -1,13 +1,17 @@
+// loads connection data from .env file
+if (process.env.NODE_ENV !== "production") {
+	require('dotenv').config();
+};
 class QuestionDAO {
     constructor() {
         const { Client } = require('pg');
-        const client = new Client({
-            //There should be a better way to get this information but for now you just have to type it in.
-            host: '',
-            user: '',
-            password: '',
-            database: '',
-        });
+        // const client = new Client({
+        //     //There should be a better way to get this information but for now you just have to type it in.
+        //     host: '',
+        //     user: '',
+        //     password: '',
+        //     database: '',
+        // });
 
     }
 
