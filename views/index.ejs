@@ -14,24 +14,21 @@
   <!-- <link rel="stylesheet" href="/css/style.css" /> -->
 </head>
 
-<body class="container bg-dark">
+<body class="container bg-dark my-5">
 
-  <h1 class="text-light">Test</h1>
+  <h1 class="text-light mb-4">Test</h1>
 
-  <% example.forEach((elm) => { %>
-  <div class="my-5">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">
-          <%= elm.testName %>
-        </h5>
-        <a class="card-link" href="#">Take Test</a>
-      </div>
+  <% Object.keys(example).forEach((elm) => { %>
+  <div class="card mb-5">
+    <div class="card-body">
+      <h5 class="card-title">
+        <%= elm %>
+      </h5>
+      <a class="card-link btn btn-primary btn-sm" href="/test/<%= elm %>">Take Test</a>
+      <a class="card-link btn btn-secondary btn-sm" href="#">Edit</a>
     </div>
   </div>
   <% }) %>
-
-  <p class="text-light"> <%= example[0].questions %> </p>
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
