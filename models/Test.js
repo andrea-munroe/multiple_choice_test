@@ -16,7 +16,7 @@ class Test {
     }
 
     addQuestion(question) {
-        if(question != "" && question != undefined) {
+        if(question != undefined && question.getCorrectAnswer() != undefined) {
             this.questions.push(question);
         }
         else {
@@ -26,7 +26,7 @@ class Test {
     }
 
     deleteQuestion(position) {
-        if(this.questions.length < position && position >= 0) {
+        if(this.questions.length > position && position >= 0) {
             this.question.splice(position);
         }
         else {
@@ -40,7 +40,7 @@ class Test {
     }
 
     getQuestion(position) {
-        if(this.questions.length < position && position >= 0) {
+        if(this.questions.length > position && position >= 0) {
             return this.questions[position];
         }
         else {
