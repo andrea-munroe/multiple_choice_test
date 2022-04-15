@@ -27,8 +27,17 @@ t1.addQuestion(q3)
 t2.addQuestion(q4)
 t2.addQuestion(q5)
 
-console.log(t1.getQuestion(0));
-console.log(t1.getQuestion(1));
-console.log(t1.getQuestion(2));
-console.log(t2.getQuestion(0));
-console.log(t2.getQuestion(1));
+//console.log(t1.getQuestion(0));
+//console.log(t1.getQuestion(1));
+//console.log(t1.getQuestion(2));
+//console.log(t2.getQuestion(0));
+//console.log(t2.getQuestion(1));
+
+let s1 = new Score("Dr. Fonteles", 100, 0)
+let s2 = new Score("Dr. Royer", 89, 0)
+let s3 = new Score("Dr. David Wright", 33, 0)
+let s4 = new Score("Dr. Fonteles", 100, 1)
+let s5 = new Score("Dr. Hoffert", 90, 1)
+// console.log(s1.getScore())
+
+console.log("database seeded")
