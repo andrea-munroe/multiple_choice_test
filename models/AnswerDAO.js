@@ -11,21 +11,26 @@ class AnswerDAO {
 
     getAnswer(id) {
         this.client.connect();
-        //Check these queries because im not entirly sure what is needed
         this.client.query('SELECT ans_text from answer where ans_id = ?', [id], (error, results) =>
         {
-            console.log(error ? error.stack : results.rows[0].message)
+            if(error) {
+                this.client.end();
+                throw error;
+            }
             this.client.end();
+            return results.rows[0].ans_text
         })
     }
 
     addAnswer(text) {
         if(text != "" && text != undefined) {
             this.client.connect();
-            //Check these queries because im not entirly sure what is needed
-            this.client.query('INSERT into answer(ans_text) values (?)', [text], (error, results) =>
+            this.client.query('INSERT into answer(ans_text) values (?)', [text], (error) =>
             {
-                console.log(error ? error.stack : results.rows[0].message)
+                if(error) {
+                    this.client.end();
+                    throw error;
+                }
                 this.client.end();
             })
         } else {
@@ -36,10 +41,12 @@ class AnswerDAO {
 
     deleteAnswer(id) {
         this.client.connect();
-        //Check these queries because im not entirly sure what is needed
-        this.client.query('DELETE from answer where ans_id = ?', [id], (error, results) =>
+        this.client.query('DELETE from answer where ans_id = ?', [id], (error) =>
         {
-            console.log(error ? error.stack : results.rows[0].message)
+            if(error) {
+                this.client.end();
+                throw error;
+            }
             this.client.end();
         })
     }
@@ -47,11 +54,12 @@ class AnswerDAO {
     updateAnswer(id, text) {
         if(text != "" && text != undefined) {
             this.client.connect();
-            //Check these queries because im not entirly sure what is needed
-            //not sure about having both [id, text] in the array like that works.
-            this.client.query('UPDATE answer set ans_text = ? where ans_id = ?', [text, id], (error, results) =>
+            this.client.query('UPDATE answer set ans_text = ? where ans_id = ?', [text, id], (error) =>
             {
-                console.log(error ? error.stack : results.rows[0].message)
+                if(error) {
+                    this.client.end();
+                    throw error;
+                }
                 this.client.end();
             })
         } else {
