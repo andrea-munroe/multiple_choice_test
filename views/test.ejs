@@ -5,32 +5,15 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>The Test</title>
+	<title><%= testName %></title>
 
 	<link rel="stylesheet" href="/css/style.css">
 
 </head>
 
 <body>
-	<h1>The Test</h1>
-
-	<main class="test container">
-    <h2>Answer These <%= questions.length %> questions</h2>
-    <div class="questions">
-      <% questions.forEach((elm) => { %>
-        <form action="">
-          <div class="question">
-            <h3> <%= elm.question %> </h3>
-            <% elm.answers.forEach((answer) => { %>
-              <input type="radio" id="<%= answer %>" name="<%= elm.question %>">
-              <label for="<%= answer %>"> <%= answer %> </label>
-            <% }) %>
-          </div>
-      <% }) %>
-    </div>
-    <button class="btn">submit answers</button>
-    </form>
-  </main>
+	<h1><%= testName %></h1>
+  
 </body>
 
 </html>

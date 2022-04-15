@@ -20,6 +20,11 @@ app.get('/', (req, res) => {
   res.render('index', { example: example })
 })
 
+app.get('/test/:testName', (req, res) => {
+  const { testName } = req.params;
+  res.render('test', { example: example, testName: testName })
+})
+
 app.all('*', (req, res) => {
   res.render('index')
 });
