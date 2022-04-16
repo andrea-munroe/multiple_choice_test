@@ -1,20 +1,16 @@
 class Answer {
     constructor(answer) {
-        this.setAnswer(answer);
+        const dao = new AnswerDAO();
+        dao.addAnswer(answer)
         this.id = 0; //This should match the id in the database. Im not sure how to set this up.
     }
 
     setAnswer(answer) {
-        if(answer != "" && answer != null) {
-            this.answer = answer
-        } else {
-            console.log("invalid string")
-            //raise exception
-        }
+        dao.updateAnswer(this.id, answer)
     }
 
     getAnswer() {
-        return this.answer;
+        return dao.getAnswer(this.id);
     }
 
     getId() {
