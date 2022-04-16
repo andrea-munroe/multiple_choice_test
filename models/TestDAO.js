@@ -9,6 +9,23 @@ class TestDAO {
         const client = new Client();
     }
 
+    addTest(test_name) {
+        if(test_name != "" && test_name != undefined) {
+            this.client.connect();
+            this.client.query('INSERT into test(test_name) values (?)', [test_name], (error) =>
+            {
+                if(error) {
+                    this.client.end();
+                    throw error;
+                }
+                this.client.end();
+            })
+        } else {
+            console.log("Invalid string");
+            //raise exception
+        }
+    }
+
     getTestName(id) {
         this.client.connect();
         this.client.query('SELECT test_name from test where test_id = ?', [id], (error, results) =>

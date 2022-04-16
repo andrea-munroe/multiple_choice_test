@@ -1,17 +1,15 @@
 class Question {
     constructor(question) {
-        this.setQuestion(question);
-        this.answers = [];
+        const dao = new QuestionDAO();
+        dao.addQuestion(question)
+        this.answers = []; //array holding Answer objects
+        this.correctPos = null;
         this.id = 0; //This should match the id in the database. Im not sure how to set this up.
     }
 
     addAnswer(answer){
-        if(answer != "" && answer != undefined) {
-            this.answers.push(answer);
-        }
-        else {
-            console.log("Invalid string");
-        }
+        this.answers.push(answer);
+        dao.addAnswer(this.id, answer.getId())
     }
     
     // for ease of seeding database, not sure if it'll be of any help to get all of them in the GUI but I figure it won't hurt
@@ -28,6 +26,7 @@ class Question {
 
     deleteAnswer(position) {
         if(this.answers.length > position && position >= 0) {
+            dao.removeAnswer(this.id, this.answers[position].getId()) //This may not actually delete an answer from the answer table. Should it?
             this.answers = this.answers.splice(position);
         }
         else {
@@ -39,6 +38,7 @@ class Question {
     setCorrectAnswer(position) {
         if(this.answers.length > position && position >= 0) {
             this.correctPos = position;
+            dao.changeCorrectAnswer(this.id, this.answers[this.correctPos].getId());
         }
         else {
             console.log("position outside array");
@@ -47,18 +47,12 @@ class Question {
     }
 
     setQuestion(question) {
-        if(question != "" && question != undefined) {
-            this.question = question;
-        }
-        else {
-            console.log("Invalid string");
-            //raise an exception
-        }
+        dao.updateQuestion(this.id, question)
     }
 
     editAnswer(position, answer) {
         if(position < this.answers.length && position >= 0) {
-            this.answers[position] = answer
+            this.answers[position].setAnswer(answer)
         } else {
             console.log("position outside array")
             //raise an exception
@@ -70,12 +64,12 @@ class Question {
     }
 
     getQuestion() {
-        return this.question;
+        return dao.getQuestion(this.id)
     }
 
     getAnswer(position) {
         if(position < this.answers.length && position >= 0) {
-            return this.answers[position]
+            return this.answers[position].getAnswer(this.answers[position].getId())
         } else {
             console.log("position outside array")
             //raise an exception
@@ -83,7 +77,11 @@ class Question {
     }
     //again, thought this might be useful for debugging, not sure if we'll need it for GUI but here it is
     getAnswers() {
-        return this.answers;
+        array = []
+        for(answer = 0; answer < this.answer.length; answer++) {
+            array.push(this.getAnswer(answer))
+        } 
+        return array;
     }
 
     //thought this might be useful, doesn't hurt anything
