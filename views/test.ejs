@@ -24,7 +24,7 @@
   </div>
 
   <div> 
-    <form action="">
+    <form id="<%= testName.split(' ').join('_').toLowerCase() %>" action="">
     <% example[testName].questions.forEach((questionElm, questionIdx) => { %>
     <div class="card mb-5">
       <div class="card-body">
@@ -32,7 +32,7 @@
         <div>
             <% example[testName].questions[questionIdx].answers.forEach((answerElm) => { %>
             <div>
-              <input type="radio" id="<%= answerElm.split(' ').join('') %>" name="<%= questionElm.question %>">
+              <input type="radio" id="<%= answerElm.split(' ').join('_').toLowerCase() %>" name="<%= questionElm.question %>">
               <label for="<%= answerElm.split(' ').join('') %>"><%= answerElm %></label>
             </div>
             <% }) %>
