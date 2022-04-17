@@ -23,7 +23,7 @@
     </nav>
   </div>
 
-  <div>
+  <div> 
     <form action="">
     <% example[testName].questions.forEach((questionElm, questionIdx) => { %>
     <div class="card mb-5">
@@ -32,8 +32,8 @@
         <div>
             <% example[testName].questions[questionIdx].answers.forEach((answerElm) => { %>
             <div>
-              <input type="radio" id="<%= answerElm %>" name="<%= questionElm.question %>">
-              <label for="<%= answerElm %>"><%= answerElm %></label>
+              <input type="radio" id="<%= answerElm.split(' ').join('') %>" name="<%= questionElm.question %>">
+              <label for="<%= answerElm.split(' ').join('') %>"><%= answerElm %></label>
             </div>
             <% }) %>
           </div>
