@@ -29,6 +29,11 @@ app.get('/test/:testName', (req, res) => {
   res.render('test', { example: example, testName: testName })
 })
 
+app.get('/edit_test/:testName', (req, res) => {
+  const { testName } = req.params;
+  res.render('edit', { example: example, testName: testName })
+})
+
 app.all('*', (req, res) => {
   res.render('index')
 });
@@ -36,5 +41,6 @@ app.all('*', (req, res) => {
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Test running on port ${port}`);
-  console.log('http://localhost:3000')
+  console.log('http://localhost:3000');
+  let url = 'http://localhost:3000';
 });
