@@ -1,15 +1,24 @@
 class Test {
+    /**
+    * @param {string} name The name of the test
+    */
     constructor(name) {
+        const TestDAO = require("../models/TestDAO").default
         const dao = new TestDAO();
-        dao.addTest(name);
+        this.id = dao.addTest(name);
         this.questions = [];
-        this.id = 0; //This should match the id in the database. Im not sure how to set this up.
     }
 
+    /**
+    * @param {string} name The name of the test
+    */
     setName(name) {
         dao.updateTestName(this.id, name);
     }
 
+    /**
+    * @param {Question} question A Question object
+    */
     addQuestion(question) {
         if(question != undefined && question.getCorrectAnswer() != undefined) {
             this.questions.push(question);
@@ -21,6 +30,9 @@ class Test {
         }
     }
 
+    /**
+    * @param {number} position The location of the Question
+    */
     deleteQuestion(position) {
         if(this.questions.length > position && position >= 0) {
             dao.removeTestQuestion(this.id, this.questions[position].getId())
@@ -36,6 +48,9 @@ class Test {
         return dao.getTestName(this.id);
     }
 
+    /**
+    * @param {number} position The location of the Question
+    */
     getQuestion(position) {
         if(this.questions.length > position && position >= 0) {
             return this.questions[position].getQuestion();
@@ -50,3 +65,5 @@ class Test {
         return this.id;
     }
 }
+
+export default Test;

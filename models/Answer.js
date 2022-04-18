@@ -1,12 +1,18 @@
 class Answer {
-    constructor(answer) {
+    /**
+    * @param {string} text The answer string
+    */
+    constructor(text) {
+        const AnswerDAO = require("../models/AnswerDAO").default
         const dao = new AnswerDAO();
-        dao.addAnswer(answer)
-        this.id = 0; //This should match the id in the database. Im not sure how to set this up.
+        this.id = dao.addAnswer(text)
     }
 
-    setAnswer(answer) {
-        dao.updateAnswer(this.id, answer)
+    /**
+    * @param {string} text The answer string
+    */
+    setAnswer(text) {
+        dao.updateAnswer(this.id, text)
     }
 
     getAnswer() {
@@ -17,3 +23,5 @@ class Answer {
         return this.id;
     }
 }
+
+export default Answer
