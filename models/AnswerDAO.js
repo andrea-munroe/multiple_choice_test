@@ -70,4 +70,4 @@ class AnswerDAO {
     }
 }
 
-module.exports = AnswerDAO;
+export default AnswerDAO;

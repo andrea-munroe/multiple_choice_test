@@ -24,4 +24,4 @@ class Answer {
     }
 }
 
-module.exports = Answer;
+export default Answer

@@ -106,4 +106,4 @@ class QuestionDAO {
     }
 }
 
-module.exports = QuestionDAO;
+export default QuestionDAO;

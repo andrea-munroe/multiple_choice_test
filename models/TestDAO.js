@@ -94,4 +94,4 @@ class TestDAO {
     }
 }
 
-module.exports = TestDAO;
+export default TestDAO;

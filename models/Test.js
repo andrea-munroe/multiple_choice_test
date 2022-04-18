@@ -66,4 +66,4 @@ class Test {
     }
 }
 
-module.exports = Test;
+export default Test;
