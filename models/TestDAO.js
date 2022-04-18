@@ -12,13 +12,14 @@ class TestDAO {
     addTest(test_name) {
         if(test_name != "" && test_name != undefined) {
             this.client.connect();
-            this.client.query('INSERT into test(test_name) values (?)', [test_name], (error) =>
+            this.client.query('INSERT into test(test_name) values (?) returning test_id', [test_name], (error, results) =>
             {
                 if(error) {
                     this.client.end();
                     throw error;
                 }
                 this.client.end();
+                return results.rows[0].test_id
             })
         } else {
             console.log("Invalid string");

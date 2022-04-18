@@ -25,13 +25,14 @@ class AnswerDAO {
     addAnswer(text) {
         if(text != "" && text != undefined) {
             this.client.connect();
-            this.client.query('INSERT into answer(ans_text) values (?)', [text], (error) =>
+            this.client.query('INSERT into answer(ans_text) values (?) returning ans_id', [text], (error, results) =>
             {
                 if(error) {
                     this.client.end();
                     throw error;
                 }
                 this.client.end();
+                return results.rows[0].ans_id;
             })
         } else {
             console.log("Invalid string");

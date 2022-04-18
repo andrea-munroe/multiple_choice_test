@@ -22,16 +22,17 @@ class QuestionDAO {
         })
     }
 
-    addQuestion(question) {
-        if(question != "" && question != undefined) {
+    addQuestion(text) {
+        if(text != "" && text != undefined) {
             client.connect();
-            client.query('INSERT into question(quest_text, correct_ans) values (?, null)', [question], (error) =>
+            client.query('INSERT into question(quest_text, correct_ans) values (?, null) returning quest_id', [text], (error, results) =>
             {
                 if(error) {
                     this.client.end();
                     throw error;
                 }
                 this.client.end();
+                return results.rows[0].quest_id
             })
         } else {
             console.log("invalid string");
