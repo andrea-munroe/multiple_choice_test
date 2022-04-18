@@ -18,7 +18,7 @@ module.exports = {
         question_id: 03,
         question: "Why is Wolverine grouchy?",
         answers: ["Daddy issues", "Always picked last", "All his girls friends die"],
-        correct_answer: "Hank Pym",
+        correct_answer: "Daddy issues",
       }
     ],
   },

@@ -14,7 +14,7 @@ const path = require('path');
 app.set('view engine', 'ejs');
 
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(express.static(path.join(__dirname, '/views')))
+app.use(express.static(path.join(__dirname, 'views')))
 
 app.get('/', (req, res) => {
   res.render('index', { example: example })
@@ -26,7 +26,13 @@ app.get('/score', (req, res) => {
 
 app.get('/test/:testName', (req, res) => {
   const { testName } = req.params;
-  res.render('test', { example: example, testName: testName })
+  const correctAnswers = [];
+
+  example[testName].questions.forEach(element => {
+    correctAnswers.push(element.correct_answer.split(' ').join('_').toLowerCase())
+  });
+  
+  res.render('test', { example: example, testName: testName, correctAnswers: correctAnswers })
 })
 
 app.get('/edit_test/:testName', (req, res) => {

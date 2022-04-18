@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch:sass": "sass --watch sass:public/css",
     "start": "nodemon index.js"
   },
   "keywords": [],
@@ -16,7 +15,6 @@
     "express": "^4.17.3",
     "pg": "^8.7.3",
     "pg-format": "^1.0.4",
-    "prettier-plugin-css-order": "^1.1.0",
-    "sass": "^1.49.8"
+    "prettier-plugin-css-order": "^1.1.0"
   }
 }
