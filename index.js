@@ -12,15 +12,22 @@ const path = require('path');
 
 // express logic
 app.set('view engine', 'ejs');
-
-app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, 'views')))
+app.use(express.urlencoded({extended: true}));
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => {
   res.render('index', { example: example })
 })
 
 app.get('/score', (req, res) => {
+  res.render('index', { example: example })
+})
+
+app.post('/scoreSubmit', (req, res) => {
+  const {scoreDisplay, name} = req.body
+  console.log(scoreDisplay, name)
+  // res.send(req.body);
   res.render('index', { example: example })
 })
 
@@ -41,7 +48,7 @@ app.get('/edit_test/:testName', (req, res) => {
 })
 
 app.all('*', (req, res) => {
-  res.render('index')
+  res.render('index', { example: example })
 });
 
 const port = process.env.PORT || 3000;

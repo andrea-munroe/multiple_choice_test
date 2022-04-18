@@ -11,6 +11,8 @@
     rel="stylesheet"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
     crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body class="container bg-dark my-5">
@@ -22,13 +24,29 @@
     </nav>
   </header>
 
-  <dialog>
+  <!-- <dialog>
       <h5 class="card-title">You Scored</h5>
       <p class="mb-0 fw-bold" id="score-display"></p>
+  </dialog> -->
+
+  <dialog id="score-dialog">
+    <h5 class="card-title">You Scored</h5>
+    <form action="/scoreSubmit"  method="post">
+      <div>
+        <label class="sr-only" for="score-display">score display</label>
+        <input class="fs-3 fw-bold" type="text" name="scoreDisplay" id="score-display" readonly>
+      </div>
+
+      <div class="input-group mt-3">
+        <label class="sr-only" for="name">name</label>
+        <input class="form-control" type="text" name="name" id="name" placeholder="name" required>
+        <button class="btn btn-sm btn-primary">Save Score</button>
+      </div>
+    </form>
   </dialog>
 
   <main>
-    <form id="test" action="POST">
+    <form id="test">
       <% example[testName].questions.forEach((questionElm, questionIdx) => { %>
       <div class="card mb-5">
         <div class="card-body">
@@ -45,12 +63,12 @@
         </div>
       </div>
       <% }) %>
-      <button id="submit" class="btn btn-sm btn-primary" type="submit">Submit</button>
+      <button id="get-grade" class="btn btn-sm btn-primary" type="submit">Submit</button>
     </form>
   </main>
 
   <script>
-    const correctAnswers = <%-JSON.stringify(correctAnswers) %>
+    const correctAnswers = <%- JSON.stringify(correctAnswers) %>
   </script>
   <script src="/javascripts/gradeTest.js"></script>
 

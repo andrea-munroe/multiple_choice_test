@@ -44,7 +44,7 @@ CREATE TABLE
 
 CREATE TABLE
     score (
-        test_id SERIAL,
+        test_id INT,
         student_name VARCHAR(50) NOT NULL,
         score INT NOT NULL CHECK (score <= 100 AND score >= 0),
         PRIMARY KEY (test_id, student_name, score),

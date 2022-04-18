@@ -1,6 +1,6 @@
 // use .env environment variables
 if (process.env.NODE_ENV !== "production") {
-	require('dotenv').config();
+  require('dotenv').config();
 };
 
 // sql module imports
@@ -11,11 +11,17 @@ const pool = new Pool()
 
 // function to query database
 const querySql = (sql, callback) => {
-	pool.query(sql, (error, result) => {
-		if (error) throw error
+  pool.query(sql, (error, result) => {
+    if (error) throw error
 
-		callback(result.rows)
-	})
+    callback(result.rows)
+  })
 }
 
 module.exports = querySql;
+
+getSql = 'select * from score'
+
+const getTest = () => {
+	
+}

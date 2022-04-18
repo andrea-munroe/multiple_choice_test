@@ -1,8 +1,8 @@
 const answers = document.querySelectorAll('input[type="radio"]');
-const submitBtn = document.getElementById('submit');
+const getGrade = document.getElementById('get-grade');
 const scoreDisplay = document.getElementById('score-display');
+const scoreDialog = document.getElementById('score-dialog');
 const submitedAnswers = [];
-
 
 const getAnswers = () => {
   submitedAnswers.length = 0;
@@ -11,7 +11,7 @@ const getAnswers = () => {
       submitedAnswers.push(answer.id);
     }
   });
-  console.log(submitedAnswers)
+  // console.log(submitedAnswers)
 };
 
 const markAnswers = () => {
@@ -35,8 +35,8 @@ const displayGrade = (submited, correct) => {
     }
   })
   let score = Math.round(grade[0] / grade[1] * 100)
-  scoreDisplay.textContent = `${score}%`;
-  scoreDisplay.parentElement.classList.add('card', 'text-center', 'mb-5')
+  scoreDisplay.value = `${score}%`;
+  scoreDialog.classList.add('card', 'text-center', 'mb-5')
   if (score > 85) {
     scoreDisplay.classList.add('text-success');
   } else if (score > 66) {
@@ -44,10 +44,13 @@ const displayGrade = (submited, correct) => {
   } else if (score <= 65) {
     scoreDisplay.classList.add('text-danger');
   }
-  submitBtn.classList.add('d-none');
+  getGrade.classList.add('d-none');
+  answers.forEach((answer) => {
+    answer.classList.add('d-none')
+  })
 }
 
-submitBtn.addEventListener('click', (e) => {
+getGrade.addEventListener('click', (e) => {
   e.preventDefault();
   getAnswers();
   markAnswers();
