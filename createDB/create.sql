@@ -15,7 +15,7 @@ CREATE TABLE
     question (
         quest_id SERIAL PRIMARY KEY,
         quest_text text NOT NULL, 
-        correct_ans int,
+        correct_ans INT,
         FOREIGN KEY (correct_ans) REFERENCES answer (ans_id) ON DELETE CASCADE
     );
 
@@ -27,16 +27,16 @@ CREATE TABLE
 
 CREATE TABLE 
     question_answer (
-        quest_id SERIAL,
-        ans_id SERIAL,
+        quest_id INT,
+        ans_id INT,
         PRIMARY KEY (quest_id, ans_id),
         FOREIGN KEY (quest_id) REFERENCES question (quest_id) ON DELETE CASCADE
     ); 
 
 CREATE TABLE 
     test_question (
-        test_id SERIAL,
-        quest_id SERIAL,
+        test_id INT,
+        quest_id INT,
         PRIMARY KEY (test_id, quest_id),
         FOREIGN KEY (test_id) REFERENCES test (test_id),
         FOREIGN KEY (quest_id) REFERENCES question (quest_id)

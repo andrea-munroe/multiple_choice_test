@@ -28,14 +28,14 @@ module.exports = {
     questions: [{
         question_id: 04,
         question: "Who is Batman?",
-        answers: ["answer1", "answer2", "answer3"],
-        correct_answer: "answer1",
+        answers: ["Bruce Wayne", "Tony Zucco", "James Gordon"],
+        correct_answer: "Bruce Wayne",
       },
       {
         question_id: 05,
         question: "Who is Capt. Marvel?",
-        answers: ["answer1", "answer2", "answer3"],
-        correct_answer: "answer3",
+        answers: ["Mr. Sivana", "Jaime Reyes", "Billy Batson"],
+        correct_answer: "Billy Batson",
       }
     ],
   }
