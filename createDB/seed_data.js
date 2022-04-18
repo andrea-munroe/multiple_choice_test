@@ -1,3 +1,7 @@
+const Test = require("../models/Test").default
+const Question = require("../models/Question").default
+const Answer = require("../models/Answer").default
+
 let q1 = new Question("True or false: This program was created using Javascript.")
 let q2 = new Question("True or false: This program uses MySQL.")
 let q3 = new Question("On which of these days do we have class?")
@@ -27,11 +31,11 @@ t1.addQuestion(q3)
 t2.addQuestion(q4)
 t2.addQuestion(q5)
 
-//console.log(t1.getQuestion(0));
-//console.log(t1.getQuestion(1));
-//console.log(t1.getQuestion(2));
-//console.log(t2.getQuestion(0));
-//console.log(t2.getQuestion(1));
+console.log(t1.getQuestion(0));
+console.log(t1.getQuestion(1));
+console.log(t1.getQuestion(2));
+console.log(t2.getQuestion(0));
+console.log(t2.getQuestion(1));
 
 let s1 = new Score("Dr. Fonteles", 100, 0)
 let s2 = new Score("Dr. Royer", 89, 0)

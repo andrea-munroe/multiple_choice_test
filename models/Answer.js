@@ -3,6 +3,7 @@ class Answer {
     * @param {string} text The answer string
     */
     constructor(text) {
+        const AnswerDAO = require("../models/AnswerDAO").default
         const dao = new AnswerDAO();
         this.id = dao.addAnswer(text)
     }
@@ -22,3 +23,5 @@ class Answer {
         return this.id;
     }
 }
+
+module.exports = Answer;

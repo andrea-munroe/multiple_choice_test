@@ -3,6 +3,7 @@ class Question {
     * @param {string} text The question string
     */
     constructor(text) {
+        const QuestionDAO = require("../models/QuestionDAO").default
         const dao = new QuestionDAO();
         this.id = dao.addQuestion(text)
         this.answers = []; //array holding Answer objects
@@ -124,3 +125,5 @@ class Question {
         return this.id;
     }
 }
+
+module.exports = Question;

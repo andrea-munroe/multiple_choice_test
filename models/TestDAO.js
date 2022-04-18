@@ -93,3 +93,5 @@ class TestDAO {
         })
     }
 }
+
+module.exports = TestDAO;

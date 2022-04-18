@@ -3,6 +3,7 @@ class Test {
     * @param {string} name The name of the test
     */
     constructor(name) {
+        const TestDAO = require("../models/TestDAO").default
         const dao = new TestDAO();
         this.id = dao.addTest(name);
         this.questions = [];
@@ -64,3 +65,5 @@ class Test {
         return this.id;
     }
 }
+
+module.exports = Test;

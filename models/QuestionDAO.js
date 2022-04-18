@@ -105,3 +105,5 @@ class QuestionDAO {
             })
     }
 }
+
+module.exports = QuestionDAO;

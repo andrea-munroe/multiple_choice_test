@@ -69,3 +69,5 @@ class AnswerDAO {
         }
     }
 }
+
+module.exports = AnswerDAO;
