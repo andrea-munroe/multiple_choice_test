@@ -3,7 +3,7 @@ class Test {
     * @param {string} name The name of the test
     */
     constructor(name) {
-        const dao = new TestDAO();
+        this.dao = new TestDAO();
         this.id = dao.addTest(name);
         this.questions = [];
     }
@@ -12,7 +12,7 @@ class Test {
     * @param {string} name The name of the test
     */
     setName(name) {
-        dao.updateTestName(this.id, name);
+        this.dao.updateTestName(this.id, name);
     }
 
     /**
@@ -21,7 +21,7 @@ class Test {
     addQuestion(question) {
         if(question != undefined && question.getCorrectAnswer() != undefined) {
             this.questions.push(question);
-            dao.addTestQuestion(this.id, question.getId())
+            this.dao.addTestQuestion(this.id, question.getId())
         }
         else {
             console.log("Invalid string");
@@ -34,7 +34,7 @@ class Test {
     */
     deleteQuestion(position) {
         if(this.questions.length > position && position >= 0) {
-            dao.removeTestQuestion(this.id, this.questions[position].getId())
+            this.dao.removeTestQuestion(this.id, this.questions[position].getId())
             this.questions.splice(position);
         }
         else {
@@ -44,7 +44,7 @@ class Test {
     }
 
     getName() {
-        return dao.getTestName(this.id);
+        return this.dao.getTestName(this.id);
     }
 
     /**
@@ -67,32 +67,27 @@ class Test {
 
 class TestDAO {
     constructor() {
-        // loads connection data from .env file
-        // if (process.env.NODE_ENV !== "production") {
-        //     require('.env').config();
-        // };
-
-        const { Client } = require('pg');
-        require('dotenv').config();
-        const client = new Client({
-            host: process.env.PGHOST,
-            port: process.env.PGPORT,
-            user: process.env.PGUSER,
-            password: process.env.PGPASSWORD,
-            database: process.env.PGDATABASE,
-        });
     }
 
     addTest(test_name) {
         if(test_name != "" && test_name != undefined) {
-            this.client.connect();
-            this.client.query('INSERT into test(test_name) values (?) returning test_id', [test_name], (error, results) =>
+            const { Client } = require('pg');
+            require('dotenv').config();
+            const client = new Client({
+                host: process.env.PGHOST,
+                port: process.env.PGPORT,
+                user: process.env.PGUSER,
+                password: process.env.PGPASSWORD,
+                database: process.env.PGDATABASE,
+            });
+            client.connect();
+            client.query('INSERT into test(test_name) values (?) returning test_id', [test_name], (error, results) =>
             {
                 if(error) {
-                    this.client.end();
+                    client.end();
                     throw error;
                 }
-                this.client.end();
+                client.end();
                 return results.rows[0].test_id
             })
         } else {
@@ -102,52 +97,88 @@ class TestDAO {
     }
 
     getTestName(id) {
-        this.client.connect();
-        this.client.query('SELECT test_name from test where test_id = ?', [id], (error, results) =>
+        const { Client } = require('pg');
+        require('dotenv').config();
+        const client = new Client({
+            host: process.env.PGHOST,
+            port: process.env.PGPORT,
+            user: process.env.PGUSER,
+            password: process.env.PGPASSWORD,
+            database: process.env.PGDATABASE,
+        });
+        client.connect();
+        client.query('SELECT test_name from test where test_id = ?', [id], (error, results) =>
         {
             if(error) {
-                this.client.end();
+                client.end();
                 throw error;
             }
-            this.client.end();
+            client.end();
             return results.rows[0].test_name;
         })
     }
 
     addTestQuestion(test_id, question_id) {
-        this.client.connect();
-        this.client.query('INSERT into test_question(test_id, quest_id) values (?, ?)', [test_id, question_id], (error) =>
+        const { Client } = require('pg');
+        require('dotenv').config();
+        const client = new Client({
+            host: process.env.PGHOST,
+            port: process.env.PGPORT,
+            user: process.env.PGUSER,
+            password: process.env.PGPASSWORD,
+            database: process.env.PGDATABASE,
+        });
+        client.connect();
+        client.query('INSERT into test_question(test_id, quest_id) values (?, ?)', [test_id, question_id], (error) =>
         {
             if(error) {
-                this.client.end();
+                client.end();
                 throw error;
             }
-            this.client.end();
+            client.end();
         })
     }
 
     removeTestQuestion(test_id, question_id) {
-        this.client.connect();
-        this.client.query('DELETE from test_question where test_id = ? and quest_id = ?', [test_id, question_id], (error) =>
+        const { Client } = require('pg');
+        require('dotenv').config();
+        const client = new Client({
+            host: process.env.PGHOST,
+            port: process.env.PGPORT,
+            user: process.env.PGUSER,
+            password: process.env.PGPASSWORD,
+            database: process.env.PGDATABASE,
+        });
+        client.connect();
+        client.query('DELETE from test_question where test_id = ? and quest_id = ?', [test_id, question_id], (error) =>
         {
             if(error) {
-                this.client.end();
+                client.end();
                 throw error;
             }
-            this.client.end();
+            client.end();
         })
     }
 
     updateTestName(id, text) {
         if(text != "" && text != undefined) {
-            this.client.connect();
-            this.client.query('UPDATE test set test_name = ? where test_id = ?', [text, id], (error) =>
+            const { Client } = require('pg');
+            require('dotenv').config();
+            const client = new Client({
+                host: process.env.PGHOST,
+                port: process.env.PGPORT,
+                user: process.env.PGUSER,
+                password: process.env.PGPASSWORD,
+                database: process.env.PGDATABASE,
+            });
+            client.connect();
+            client.query('UPDATE test set test_name = ? where test_id = ?', [text, id], (error) =>
             {
                 if(error) {
-                    this.client.end();
+                    client.end();
                     throw error;
                 }
-                this.client.end();
+                client.end();
             })
         } else {
             console.log("Invalid string");
@@ -156,14 +187,23 @@ class TestDAO {
     }
 
     deleteTest(id) {
-        this.client.connect();
-        this.client.query('DELETE from test where test_id = ?', [id], (error) =>
+        const { Client } = require('pg');
+        require('dotenv').config();
+        const client = new Client({
+            host: process.env.PGHOST,
+            port: process.env.PGPORT,
+            user: process.env.PGUSER,
+            password: process.env.PGPASSWORD,
+            database: process.env.PGDATABASE,
+        });
+        client.connect();
+        client.query('DELETE from test where test_id = ?', [id], (error) =>
         {
             if(error) {
-                this.client.end();
+                client.end();
                 throw error;
             }
-            this.client.end();
+            client.end();
         })
     }
 }
@@ -173,8 +213,8 @@ class Question {
     * @param {string} text The question string
     */
     constructor(text) {
-        const dao = new QuestionDAO();
-        this.id = dao.addQuestion(text)
+        this.dao = new QuestionDAO();
+        this.id = this.dao.addQuestion(text)
         this.answers = []; //array holding Answer objects
         this.correctPos = null;
     }
@@ -184,7 +224,7 @@ class Question {
     */
     addAnswer(answer){
         this.answers.push(answer);
-        dao.addAnswer(this.id, answer.getId())
+        this.dao.addAnswer(this.id, answer.getId())
     }
     
     // for ease of seeding database, not sure if it'll be of any help to get all of them in the GUI but I figure it won't hurt
@@ -207,7 +247,7 @@ class Question {
     */
     deleteAnswer(position) {
         if(this.answers.length > position && position >= 0) {
-            dao.removeAnswer(this.id, this.answers[position].getId()) //This may not actually delete an answer from the answer table. Should it?
+            this.dao.removeAnswer(this.id, this.answers[position].getId()) //This may not actually delete an answer from the answer table. Should it?
             this.answers = this.answers.splice(position);
         }
         else {
@@ -222,7 +262,7 @@ class Question {
     setCorrectAnswer(position) {
         if(this.answers.length > position && position >= 0) {
             this.correctPos = position;
-            dao.changeCorrectAnswer(this.id, this.answers[this.correctPos].getId());
+            this.dao.changeCorrectAnswer(this.id, this.answers[this.correctPos].getId());
         }
         else {
             console.log("position outside array");
@@ -234,7 +274,7 @@ class Question {
     * @param {string} text The question string
     */
     setQuestion(text) {
-        dao.updateQuestion(this.id, text)
+        this.dao.updateQuestion(this.id, text)
     }
 
     /**
@@ -255,7 +295,7 @@ class Question {
     }
 
     getQuestion() {
-        return dao.getQuestion(this.id)
+        return this.dao.getQuestion(this.id)
     }
 
     /**
@@ -296,12 +336,9 @@ class Question {
 }
 
 class QuestionDAO {
-    constructor() {
-        //loads connection data from .env file
-        // if (process.env.NODE_ENV !== "production") {
-        //     require('dotenv').config();
-        // };
+    constructor() {}
 
+    getQuestion(id) {
         const { Client } = require('pg');
         require('dotenv').config();
         const client = new Client({
@@ -312,31 +349,36 @@ class QuestionDAO {
             database: process.env.PGDATABASE,
         });
         client.connect();
-    }
-
-    getQuestion(id) {
-        client.connect();
         client.query('SELECT quest_text from question where quest_id = ?', [id], (error, results) =>
         {
             if(error) {
-                this.client.end();
+                client.end();
                 throw error;
             }
-            this.client.end();
+            client.end();
             return results.rows[0].quest_text
         })
     }
 
     addQuestion(text) {
         if(text != "" && text != undefined) {
-            this.client.connect();
-            this.client.query('INSERT into question(quest_text, correct_ans) values (?, null) returning quest_id', [text], (error, results) =>
+            const { Client } = require('pg');
+            require('dotenv').config();
+            const client = new Client({
+                host: process.env.PGHOST,
+                port: process.env.PGPORT,
+                user: process.env.PGUSER,
+                password: process.env.PGPASSWORD,
+                database: process.env.PGDATABASE,
+            });
+            client.connect();
+            client.query('INSERT into question(quest_text, correct_ans) values (?, null) returning quest_id', [text], (error, results) =>
             {
                 if(error) {
-                    this.client.end();
+                    client.end();
                     throw error;
                 }
-                this.client.end();
+                client.end();
                 return results.rows[0].quest_id
             })
         } else {
@@ -347,14 +389,23 @@ class QuestionDAO {
 
     updateQuestion(id, text) {
         if(text != "" && text != undefined) {
-            this.client.connect();
-            this.client.query('UPDATE question set quest_text = ? where quest_id = ?', [text, id], (error) =>
+            const { Client } = require('pg');
+            require('dotenv').config();
+            const client = new Client({
+                host: process.env.PGHOST,
+                port: process.env.PGPORT,
+                user: process.env.PGUSER,
+                password: process.env.PGPASSWORD,
+                database: process.env.PGDATABASE,
+            });
+            client.connect();
+            client.query('UPDATE question set quest_text = ? where quest_id = ?', [text, id], (error) =>
             {
                 if(error) {
-                    this.client.end();
+                    client.end();
                     throw error;
                 }
-                this.client.end();
+                client.end();
             })
         } else {
             console.log("Invalid string");
@@ -363,86 +414,6 @@ class QuestionDAO {
     }
 
     deleteQuestion(id) {
-        this.client.connect();
-        this.client.query('DELETE from question where quest_id = ?', [id], (error) =>
-        {
-            if(error) {
-                this.client.end();
-                throw error;
-            }
-            this.client.end();
-        })
-    }
-
-    addAnswer(question_id, answer_id) {
-        this.client.connect();
-        this.client.query('INSERT into question_answer(quest_id, ans_id) values (?, ?)', [question_id, answer_id], (error) =>
-        {
-            if(error) {
-                this.client.end();
-                throw error;
-            }
-            this.client.end();
-        })
-    }
-
-    removeAnswer(question_id, answer_id) {
-        this.client.connect();
-        this.client.query('DELETE from question_answer where quest_id = ? and ans_id = ?', [question_id, answer_id], (error) =>
-        {
-            if(error) {
-                this.client.end();
-                throw error;
-            }
-            this.client.end();
-        })
-    }
-
-    changeCorrectAnswer(question_id, answer_id) {
-        this.client.connect();
-            this.client.query('UPDATE question set correct_ans = ? where quest_id = ?', [answer_id, question_id], (error) =>
-            {
-                if(error) {
-                    this.client.end();
-                    throw error;
-                }
-                this.client.end();
-            })
-    }
-}
-
-class Answer {
-    /**
-    * @param {string} text The answer string
-    */
-    constructor(text) {
-        const dao = new AnswerDAO();
-        this.id = dao.addAnswer(text)
-    }
-
-    /**
-    * @param {string} text The answer string
-    */
-    setAnswer(text) {
-        dao.updateAnswer(this.id, text)
-    }
-
-    getAnswer() {
-        return dao.getAnswer(this.id);
-    }
-
-    getId() {
-        return this.id;
-    }
-}
-
-class AnswerDAO {
-    constructor() {
-        // loads connection data from .env file
-        // if (process.env.NODE_ENV !== "production") {
-        //     require('.env').config();
-        // };
-
         const { Client } = require('pg');
         require('dotenv').config();
         const client = new Client({
@@ -452,31 +423,151 @@ class AnswerDAO {
             password: process.env.PGPASSWORD,
             database: process.env.PGDATABASE,
         });
+        client.connect();
+        client.query('DELETE from question where quest_id = ?', [id], (error) =>
+        {
+            if(error) {
+                client.end();
+                throw error;
+            }
+            client.end();
+        })
+    }
+
+    addAnswer(question_id, answer_id) {
+        const { Client } = require('pg');
+        require('dotenv').config();
+        const client = new Client({
+            host: process.env.PGHOST,
+            port: process.env.PGPORT,
+            user: process.env.PGUSER,
+            password: process.env.PGPASSWORD,
+            database: process.env.PGDATABASE,
+        });
+        client.connect();
+        client.query('INSERT into question_answer(quest_id, ans_id) values (?, ?)', [question_id, answer_id], (error) =>
+        {
+            if(error) {
+                client.end();
+                throw error;
+            }
+            client.end();
+        })
+    }
+
+    removeAnswer(question_id, answer_id) {
+        const { Client } = require('pg');
+        require('dotenv').config();
+        const client = new Client({
+            host: process.env.PGHOST,
+            port: process.env.PGPORT,
+            user: process.env.PGUSER,
+            password: process.env.PGPASSWORD,
+            database: process.env.PGDATABASE,
+        });
+        client.connect();
+        client.query('DELETE from question_answer where quest_id = ? and ans_id = ?', [question_id, answer_id], (error) =>
+        {
+            if(error) {
+                client.end();
+                throw error;
+            }
+            client.end();
+        })
+    }
+
+    changeCorrectAnswer(question_id, answer_id) {
+        const { Client } = require('pg');
+        require('dotenv').config();
+        const client = new Client({
+            host: process.env.PGHOST,
+            port: process.env.PGPORT,
+            user: process.env.PGUSER,
+            password: process.env.PGPASSWORD,
+            database: process.env.PGDATABASE,
+        });
+        client.connect();
+        client.query('UPDATE question set correct_ans = ? where quest_id = ?', [answer_id, question_id], (error) =>
+        {
+            if(error) {
+                client.end();
+                throw error;
+            }
+            client.end();
+        })
+    }
+}
+
+class Answer {
+    /**
+    * @param {string} text The answer string
+    */
+    constructor(text) {
+        this.dao = new AnswerDAO();
+        this.id = dao.addAnswer(text)
+    }
+
+    /**
+    * @param {string} text The answer string
+    */
+    setAnswer(text) {
+        this.dao.updateAnswer(this.id, text)
+    }
+
+    getAnswer() {
+        return this.dao.getAnswer(this.id);
+    }
+
+    getId() {
+        return this.id;
+    }
+}
+
+class AnswerDAO {
+    constructor() {
     }
 
     getAnswer(id) {
-        this.client.connect();
-        this.client.query('SELECT ans_text from answer where ans_id = ?', [id], (error, results) =>
+        const { Client } = require('pg');
+        require('dotenv').config();
+        const client = new Client({
+            host: process.env.PGHOST,
+            port: process.env.PGPORT,
+            user: process.env.PGUSER,
+            password: process.env.PGPASSWORD,
+            database: process.env.PGDATABASE,
+        });
+        client.connect();
+        client.query('SELECT ans_text from answer where ans_id = ?', [id], (error, results) =>
         {
             if(error) {
-                this.client.end();
+                client.end();
                 throw error;
             }
-            this.client.end();
+            client.end();
             return results.rows[0].ans_text
         })
     }
 
     addAnswer(text) {
         if(text != "" && text != undefined) {
-            this.client.connect();
-            this.client.query('INSERT into answer(ans_text) values (?) returning ans_id', [text], (error, results) =>
+            const { Client } = require('pg');
+            require('dotenv').config();
+            const client = new Client({
+                host: process.env.PGHOST,
+                port: process.env.PGPORT,
+                user: process.env.PGUSER,
+                password: process.env.PGPASSWORD,
+                database: process.env.PGDATABASE,
+            });
+            client.connect();
+            client.query('INSERT into answer(ans_text) values (?) returning ans_id', [text], (error, results) =>
             {
                 if(error) {
-                    this.client.end();
+                    client.end();
                     throw error;
                 }
-                this.client.end();
+                client.end();
                 return results.rows[0].ans_id;
             })
         } else {
@@ -486,27 +577,45 @@ class AnswerDAO {
     }
 
     deleteAnswer(id) {
-        this.client.connect();
-        this.client.query('DELETE from answer where ans_id = ?', [id], (error) =>
+        const { Client } = require('pg');
+        require('dotenv').config();
+        const client = new Client({
+            host: process.env.PGHOST,
+            port: process.env.PGPORT,
+            user: process.env.PGUSER,
+            password: process.env.PGPASSWORD,
+            database: process.env.PGDATABASE,
+        });
+        client.connect();
+        client.query('DELETE from answer where ans_id = ?', [id], (error) =>
         {
             if(error) {
-                this.client.end();
+                client.end();
                 throw error;
             }
-            this.client.end();
+            client.end();
         })
     }
 
     updateAnswer(id, text) {
         if(text != "" && text != undefined) {
-            this.client.connect();
-            this.client.query('UPDATE answer set ans_text = ? where ans_id = ?', [text, id], (error) =>
+            const { Client } = require('pg');
+            require('dotenv').config();
+            const client = new Client({
+                host: process.env.PGHOST,
+                port: process.env.PGPORT,
+                user: process.env.PGUSER,
+                password: process.env.PGPASSWORD,
+                database: process.env.PGDATABASE,
+            });
+            client.connect();
+            client.query('UPDATE answer set ans_text = ? where ans_id = ?', [text, id], (error) =>
             {
                 if(error) {
-                    this.client.end();
+                    client.end();
                     throw error;
                 }
-                this.client.end();
+                client.end();
             })
         } else {
             console.log("Invalid string");
