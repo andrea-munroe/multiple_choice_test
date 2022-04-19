@@ -1,24 +1,50 @@
+import Question from "./Question";
+
 class QuestionDAO {
     constructor() {
-        // loads connection data from .env file
+       // loads connection data from .env file
         if (process.env.NODE_ENV !== "production") {
             require('dotenv').config();
         };
 
         const { Client } = require('pg');
-        const client = new Client();
+        this.client = new Client({
+            host: process.env.PGHOST,
+            port: process.env.PGPORT,
+            user: process.env.PGUSER,
+            password: process.env.PGPASSWORD,
+            database: process.env.PGDATABASE,
+        });
     }
 
-    getQuestion(id) {
-        client.connect();
-        client.query('SELECT quest_text from question where quest_id = ?', [id], (error, results) =>
+    getQuestion(id, callback) {
+        this.client.connect();
+        this.client.query('SELECT quest_id, quest_text, correct_ans from question where quest_id = ?', [id], (error, results) =>
         {
             if(error) {
                 this.client.end();
                 throw error;
             }
             this.client.end();
-            return results.rows[0].quest_text
+            
+            callback(new Question(results.rows[0].quest_id, results.rows[0].quest_text), null, results.rows[0].correct_ans);
+        })
+    }
+
+    getAllQuestions() {
+        this.client.connect();
+        this.client.query('SELECT quest_id, quest_text, correct_ans from question where quest_id = ?', [id], (error, results) =>
+        {
+            if(error) {
+                this.client.end();
+                throw error;
+            }
+            this.client.end();
+            for(i=0; i < results.rows.length; i++) {
+                questions.push(new Question(results.rows[i].ans_id, results.rows[i].ans_text))
+            }
+            
+            callback(new Question(results.rows[0].quest_id, results.rows[0].quest_text));
         })
     }
 
@@ -40,7 +66,7 @@ class QuestionDAO {
         }
     }
 
-    updateQuestion(id, text) {
+    updateQuestionText(question, text) {
         if(text != "" && text != undefined) {
             client.connect();
             client.query('UPDATE question set quest_text = ? where quest_id = ?', [text, id], (error) =>

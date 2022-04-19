@@ -35,6 +35,10 @@ app.get('/', async (req, res) => {
 app.get('/test/:testId', async (req, res) => {
   const { testId } = req.params;
 
+  // Create the DAO.
+  // Get a test from the TestDAO using testId
+  
+
   // const queryString =
   //   'SELECT * FROM question	JOIN question_answer ON question.quest_id = question_answer.quest_id JOIN answer ON question_answer.ans_id = answer.ans_id;';
   const queryString =
