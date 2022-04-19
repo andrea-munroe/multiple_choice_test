@@ -34,7 +34,7 @@ app.get('/', async (req, res) => {
 
 app.get('/test/:testId', async (req, res) => {
   const { testId } = req.params;
-  
+
   const queryString =
     'SELECT * FROM test natural join test_question natural join question natural join question_answer natural join answer Where test_id = $1';
   const { rows } = await db.query(queryString, [testId]);
@@ -57,6 +57,10 @@ app.get('/test/:testId', async (req, res) => {
     questWithAnswers[name] = { answers: [], correct: '' };
   });
 
+  // questNames.forEach((name,idx) => {
+  //   questWithAnswers.push({ question: name, answers: [], correct: '' });
+  // });
+
   rows.forEach((row) => {
     if (row.quest_text.includes(questWithAnswers)) {
       questWithAnswers[row.quest_text].answers.push(row.ans_text);
@@ -64,8 +68,14 @@ app.get('/test/:testId', async (req, res) => {
     }
   });
 
-  // res.render('test', { questionNames: questNames, testContent: questWithAnswers, testName: rows[0].test_name })
-  res.render('index', { tests: rows });
+  // Object.keys(questWithAnswers).forEach((elm) => {
+  //   console.log(questWithAnswers[elm].answers);
+  // });
+
+  // console.log(Object.keys(questWithAnswers))
+
+  res.render('test', { testContent: questWithAnswers, testName: rows[0].test_name })
+  // res.render('index', { tests: rows });
 });
 
 // render test edit page
