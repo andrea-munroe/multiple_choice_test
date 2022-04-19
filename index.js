@@ -23,15 +23,22 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.get('/', async (req, res) => {
   const queryString = 'SELECT * FROM test'
   const { rows } = await db.query(queryString)
-  const testNames = []
-  rows.forEach((row) =>{
-    testNames.push(row.test_name)
-  })
-console.log(rows)
-  res.render('index', { tests: testNames })
+
+  res.render('index', { tests: rows })
 })
 
 // render test page
+// app.get('/test/:testName', (req, res) => {
+//   const { testName } = req.params;
+//   const correctAnswers = [];
+
+//   example[testName].questions.forEach(element => {
+//     correctAnswers.push(element.correct_answer.split(' ').join('_').toLowerCase())
+//   });
+
+//   res.render('test', { example: example, testName: testName, correctAnswers: correctAnswers })
+// })
+
 app.get('/test/:testName', (req, res) => {
   const { testName } = req.params;
   const correctAnswers = [];
@@ -42,6 +49,9 @@ app.get('/test/:testName', (req, res) => {
 
   res.render('test', { example: example, testName: testName, correctAnswers: correctAnswers })
 })
+
+
+
 
 // render test edit page
 app.get('/edit_test/:testName', (req, res) => {
