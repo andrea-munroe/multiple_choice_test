@@ -20,7 +20,11 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 
 // render home page
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
+  const queryString = 'SELECT * FROM test'
+  const { rows } = await db.query(queryString)
+  console.log(rows)
+
   res.render('index', { example: example })
 })
 
@@ -52,8 +56,8 @@ app.post('/scoreSubmit', async (req, res) => {
   const { scoreDisplay, name } = req.body
   let score = scoreDisplay.slice(0, -1)
   
-  sql = 'INSERT INTO score VALUES(1, $1, $2)'
-  const { rows } = await db.query(sql, [name, score])
+  const queryString = 'INSERT INTO score VALUES(1, $1, $2)'
+  const { rows } = await db.query(queryString, [name, score])
 
   res.render('index', { example: example })
 })
