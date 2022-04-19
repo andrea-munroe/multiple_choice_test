@@ -1,6 +1,6 @@
 // use .env environment variables
 if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
+	require('dotenv').config();
 }
 
 // test requires
@@ -20,10 +20,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // render home page
 app.get('/', async (req, res) => {
-  const queryString = 'SELECT * FROM test';
-  const { rows } = await db.query(queryString);
+	const queryString = 'SELECT * FROM test';
+	const { rows } = await db.query(queryString);
 
-  res.render('index', { tests: rows });
+	res.render('index', { tests: rows });
 });
 
 // render test page
@@ -39,60 +39,74 @@ app.get('/', async (req, res) => {
 // })
 
 app.get('/test/:testId', async (req, res) => {
-  const { testId } = req.params;
+	const { testId } = req.params;
 
-  const queryString =
-    'SELECT * FROM question	JOIN question_answer ON question.quest_id = question_answer.quest_id JOIN answer ON question_answer.ans_id = answer.ans_id;';
-  const { rows } = await db.query(queryString);
+	const queryString =
+		'SELECT * FROM question	JOIN question_answer ON question.quest_id = question_answer.quest_id JOIN answer ON question_answer.ans_id = answer.ans_id;';
+	const { rows } = await db.query(queryString);
 
-  const questNames = [];
+	const questNames = [];
 
-  // extracts question names from query and pushes them to questNames array
-  rows.forEach((row) => {
-    const tempArray = [];
-    tempArray.push(row.quest_text);
-    tempArray.forEach((element) => {
-      if (!questNames.includes(element)) {
-        questNames.push(element);
-      }
-    });
-  });
+	// extracts question names from query and pushes them to questNames array
+	rows.forEach((row) => {
+		const tempArray = [];
+		tempArray.push(row.quest_text);
+		tempArray.forEach((element) => {
+			if (!questNames.includes(element)) {
+				questNames.push(element);
+			}
+		});
+	});
 
-  console.log(questNames);
+	// creates an array of objects Question, Answer, Correct Answer
+	questWithAnswers = [];
+	questNames.forEach((name) => {
+		// questWithAnswers[name] = []
+		questWithAnswers[name] = {answers: [], correct:''}
+	});
 
-  res.render('index', { tests: rows });
+	rows.forEach((row)=>{
+		if(row.quest_text.includes(questWithAnswers)) {
+			questWithAnswers[row.quest_text].answers.push(row.ans_text)
+			questWithAnswers[row.quest_text].correct = row.correct_ans
+		}
+	})
+
+	console.log(questWithAnswers);
+
+	res.render('index', { tests: rows });
 });
 
 // render test edit page
 app.get('/edit_test/:testName', (req, res) => {
-  const { testName } = req.params;
-  res.render('edit', { example: example, testName: testName });
+	const { testName } = req.params;
+	res.render('edit', { example: example, testName: testName });
 });
 
 // render score display page
 app.get('/score', (req, res) => {
-  res.render('index', { example: example });
+	res.render('index', { example: example });
 });
 
 // insert score into db from test page
 app.post('/scoreSubmit', async (req, res) => {
-  const { scoreDisplay, name } = req.body;
-  let score = scoreDisplay.slice(0, -1);
+	const { scoreDisplay, name } = req.body;
+	let score = scoreDisplay.slice(0, -1);
 
-  const queryString = 'INSERT INTO score VALUES(1, $1, $2)';
-  const { rows } = await db.query(queryString, [name, score]);
+	const queryString = 'INSERT INTO score VALUES(1, $1, $2)';
+	const { rows } = await db.query(queryString, [name, score]);
 
-  res.render('index', { example: example });
+	res.render('index', { example: example });
 });
 
 // catch all render index
 app.all('*', (req, res) => {
-  res.render('index', { example: example });
+	res.render('index', { example: example });
 });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Test running on port ${port}`);
-  console.log('http://localhost:3000');
-  let url = 'http://localhost:3000';
+	console.log(`Test running on port ${port}`);
+	console.log('http://localhost:3000');
+	let url = 'http://localhost:3000';
 });
