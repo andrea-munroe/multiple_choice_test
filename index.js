@@ -23,9 +23,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.get('/', async (req, res) => {
   const queryString = 'SELECT * FROM test'
   const { rows } = await db.query(queryString)
-  console.log(rows)
-
-  res.render('index', { example: example })
+  const testNames = []
+  rows.forEach((row) =>{
+    testNames.push(row.test_name)
+  })
+console.log(rows)
+  res.render('index', { tests: testNames })
 })
 
 // render test page
