@@ -16,17 +16,22 @@
 
 <body class="container bg-dark my-5">
 
-  <h1 class="text-light mb-4">Test</h1>
+  <header class="d-flex justify-content-between mb-4">
+    <h1 class="text-light mb-4">Test</h1>
+    <nav class="btn-group btn-group-sm my-auto" role="group" aria-label="nav group">
+      <a class="btn btn-primary" href="#">New Test</a>
+    </nav>
+  </header>
 
-  <% Object.keys(example).forEach((elm) => { %>
+  <% tests.forEach((test) => { %>
   <div class="card mb-5">
     <div class="card-body d-flex justify-content-between">
       <h5 class="card-title my-auto">
-        <%= elm %>
+        <%= test.test_name %>
       </h5>
       <div class="btn-group btn-group-sm">
-        <a class="card-link btn btn-primary" href="/test/<%= elm %>">Take Test</a>
-        <a class="card-link btn btn-secondary" href="/edit_test/<%= elm %>">Edit</a>
+        <a class="card-link btn btn-primary" href="/test/<%= test.test_id %>">Take Test</a>
+        <a class="card-link btn btn-secondary" href="/edit_test/<%= test.test_id %>">Edit</a>
       </div>
     </div>
   </div>
