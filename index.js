@@ -18,25 +18,13 @@ app.use(express.static(path.join(__dirname, 'views')))
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')))
 
+
+// render home page
 app.get('/', (req, res) => {
   res.render('index', { example: example })
 })
 
-app.get('/score', (req, res) => {
-  res.render('index', { example: example })
-})
-
-app.post('/scoreSubmit', async (req, res) => {
-  const { scoreDisplay, name } = req.body
-  console.log(scoreDisplay, name)
-  let score = scoreDisplay.slice(0, -1)
-  sql = 'INSERT INTO score VALUES(1, $1, $2)'
-  const { rows } = await db.query(sql, [name, score])
-  
-  // res.send(req.body);
-  res.render('index', { example: example })
-})
-
+// render test page
 app.get('/test/:testName', (req, res) => {
   const { testName } = req.params;
   const correctAnswers = [];
@@ -48,11 +36,29 @@ app.get('/test/:testName', (req, res) => {
   res.render('test', { example: example, testName: testName, correctAnswers: correctAnswers })
 })
 
+// render test edit page
 app.get('/edit_test/:testName', (req, res) => {
   const { testName } = req.params;
   res.render('edit', { example: example, testName: testName })
 })
 
+// render score display page
+app.get('/score', (req, res) => {
+  res.render('index', { example: example })
+})
+
+// insert score into db from test page
+app.post('/scoreSubmit', async (req, res) => {
+  const { scoreDisplay, name } = req.body
+  let score = scoreDisplay.slice(0, -1)
+  
+  sql = 'INSERT INTO score VALUES(1, $1, $2)'
+  const { rows } = await db.query(sql, [name, score])
+
+  res.render('index', { example: example })
+})
+
+// catch all render index
 app.all('*', (req, res) => {
   res.render('index', { example: example })
 });
