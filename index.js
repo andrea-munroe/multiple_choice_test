@@ -47,6 +47,7 @@ app.get('/test/:testId', async (req, res) => {
 
   const questNames = [];
 
+  // extracts question names from query and pushes them to questNames array
   rows.forEach((row) => {
     const tempArray = [];
     tempArray.push(row.quest_text);
