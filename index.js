@@ -70,7 +70,6 @@ app.get('/test/:testId', async (req, res) => {
 	// create correct answer array
 	const correctAnswerArray = [];
 	Object.keys(correctAnswers).forEach((key) => {
-		console.log(correctAnswers[key].ans_text);
 		correctAnswerArray.push(correctAnswers[key].ans_text);
 	});
 
@@ -89,7 +88,7 @@ app.get('/edit_test/:testName', (req, res) => {
 
 // render score display page
 app.get('/score', (req, res) => {
-	res.render('index', { example: example });
+	res.redirect('/');
 });
 
 // insert score into db from test page
@@ -100,12 +99,12 @@ app.post('/scoreSubmit', async (req, res) => {
 	const queryString = 'INSERT INTO score VALUES(1, $1, $2)';
 	const { rows } = await db.query(queryString, [name, score]);
 
-	res.render('index', { example: example });
+	res.redirect('/');
 });
 
 // catch all render index
 app.all('*', (req, res) => {
-	res.render('index', { example: example });
+	res.redirect('/');
 });
 
 const port = process.env.PORT || 3000;

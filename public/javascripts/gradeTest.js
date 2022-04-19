@@ -7,19 +7,16 @@ const submitedAnswers = [];
 const getAnswers = () => {
 	submitedAnswers.length = 0;
 	answers.forEach((answer) => {
-		if (answer.checked === true) {
-			submitedAnswers.push(answer.id);
+		if (answer.checked == true) {
+			submitedAnswers.push(answer.value);
 		}
 	});
-	// console.log(submitedAnswers)
 };
 
-// console.log(correctAnswers)
 const markAnswers = () => {
 	answers.forEach((answer) => {
-		console.log(answer.id)
-		if (answer.checked === true) {
-			if (correctAnswers.includes(answer.id) === false) {
+		if (answer.checked == true) {
+			if (correctAnswers.includes(answer.value) == false) {
 				answer.parentElement.classList.add('text-danger', 'fw-bold');
 			} else {
 				answer.parentElement.classList.add('text-success', 'fw-bold');
@@ -56,8 +53,5 @@ getGrade.addEventListener('click', (e) => {
 	e.preventDefault();
 	getAnswers();
 	markAnswers();
-	// displayGrade(submitedAnswers, correctAnswers);
-	// console.log(submitedAnswers)
+	displayGrade(submitedAnswers, correctAnswers);
 });
-
-// console.log(correctAnswers)
