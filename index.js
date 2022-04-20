@@ -92,7 +92,7 @@ app.get('/scores', async (req, res) => {
 	const queryString =
 		'SELECT test_name, student_name, score.score FROM score NATURAL JOIN test;';
 	const { rows: scores } = await db.query(queryString);
-	console.log(scores)
+
 	res.render('scores', { scores: scores });
 });
 
@@ -116,5 +116,4 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
 	console.log(`Test running on port ${port}`);
 	console.log('http://localhost:3000');
-	let url = 'http://localhost:3000';
 });
