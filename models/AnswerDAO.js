@@ -1,4 +1,4 @@
-import Answer from './Answer';
+const Answer = require('./Answer')
 
 class AnswerDAO {
     constructor() {
@@ -96,4 +96,4 @@ class AnswerDAO {
     }
 }
 
-export default AnswerDAO;
+module.exports =  AnswerDAO;

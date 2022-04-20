@@ -9,4 +9,4 @@ class Test {
     }
 }
 
-export default Test;
+module.exports = Test;
