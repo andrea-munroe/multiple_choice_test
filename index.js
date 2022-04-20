@@ -18,6 +18,7 @@ app.use(express.static(path.join(__dirname, 'views')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // ------------------------ //
 // ------- Routes --------- //
 // ------------------------ //
@@ -83,12 +84,16 @@ app.get('/test/:testId', async (req, res) => {
 // render test edit page
 app.get('/edit_test/:testName', (req, res) => {
 	const { testName } = req.params;
-	res.render('edit', { example: example, testName: testName });
+	res.redirect('/');
 });
 
-// render score display page
-app.get('/score', (req, res) => {
-	res.redirect('/');
+// Score Page
+app.get('/scores', async (req, res) => {
+	const queryString =
+		'SELECT test_name, student_name, score.score FROM score NATURAL JOIN test;';
+	const { rows: scores } = await db.query(queryString);
+	console.log(scores)
+	res.render('scores', { scores: scores });
 });
 
 // insert score into db from test page
