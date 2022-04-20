@@ -16,10 +16,6 @@ class Question {
             }
         }
     }
-
-    addAnswer(answer) {
-        this.answers.push(answer);
-    }
 }
 
 export default Question;

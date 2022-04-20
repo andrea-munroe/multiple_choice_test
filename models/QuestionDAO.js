@@ -1,3 +1,4 @@
+import AnswerDAO from "./AnswerDAO";
 import Question from "./Question";
 
 class QuestionDAO {
@@ -15,50 +16,75 @@ class QuestionDAO {
             password: process.env.PGPASSWORD,
             database: process.env.PGDATABASE,
         });
+        this.ansDAO = new AnswerDAO();
+    }
+
+    getQuestionAnswers(id, callback) {
+        this.client.connect();
+        this.client.query('SELECT ans_id from question_answer where quest_id = ?', [id], (error, results) =>
+        {
+            if(error) {
+                this.client.end();
+                throw error;
+            }
+            this.client.end();
+            let answers = [];
+            for(let i = 0; i < results.rows.length; i++) {
+                this.ansDAO.getAnswer(results.rows[i].ans_id, (answer) => {
+                    answers.push(answer);
+                })
+            }
+            callback(answers)
+        })
     }
 
     getQuestion(id, callback) {
         this.client.connect();
-        this.client.query('SELECT quest_id, quest_text, correct_ans from question where quest_id = ?', [id], (error, results) =>
+        this.client.query('SELECT quest_text, correct_ans from question where quest_id = ?', [id], (error, results) =>
         {
             if(error) {
                 this.client.end();
                 throw error;
             }
             this.client.end();
-            
-            callback(new Question(results.rows[0].quest_id, results.rows[0].quest_text), null, results.rows[0].correct_ans);
+            let question = new Question(id, results.rows[0].quest_text, null, results.rows[0].correct_ans)
+            this.getQuestionAnswers(id, (answers) => {
+                question.answers = answers;
+            })
+            callback(question);
         })
     }
 
-    getAllQuestions() {
+    getAllQuestions(callback) {
         this.client.connect();
-        this.client.query('SELECT quest_id, quest_text, correct_ans from question where quest_id = ?', [id], (error, results) =>
+        this.client.query('SELECT quest_id from question', (error, results) =>
         {
             if(error) {
                 this.client.end();
                 throw error;
             }
             this.client.end();
-            for(i=0; i < results.rows.length; i++) {
-                questions.push(new Question(results.rows[i].ans_id, results.rows[i].ans_text))
+            let questions = []
+            for(let i=0; i < results.rows.length; i++) {
+                this.getQuestion(results.rows[i].quest_id, (question) => {
+                    questions.push(question);
+                })
             }
-            
-            callback(new Question(results.rows[0].quest_id, results.rows[0].quest_text));
+            callback(questions);
         })
     }
 
-    addQuestion(text) {
+    addQuestion(text, callback) {
         if(text != "" && text != undefined) {
-            client.connect();
-            client.query('INSERT into question(quest_text, correct_ans) values (?, null) returning quest_id', [text], (error, results) =>
+            this.client.connect();
+            this.client.query('INSERT into question(quest_text, correct_ans) values (?, null) returning quest_id', [text], (error, results) =>
             {
                 if(error) {
                     this.client.end();
                     throw error;
                 }
                 this.client.end();
-                return results.rows[0].quest_id
+                callback(new Question(results.rows[0].quest_id, text, null, null))
             })
         } else {
             console.log("invalid string");
@@ -68,14 +94,15 @@ class QuestionDAO {
 
     updateQuestionText(question, text) {
         if(text != "" && text != undefined) {
-            client.connect();
-            client.query('UPDATE question set quest_text = ? where quest_id = ?', [text, id], (error) =>
+            this.client.connect();
+            this.client.query('UPDATE question set quest_text = ? where quest_id = ?', [text, id], (error) =>
             {
                 if(error) {
                     this.client.end();
                     throw error;
                 }
                 this.client.end();
+                question.quest_text = text;
             })
         } else {
             console.log("Invalid string");
@@ -83,9 +110,9 @@ class QuestionDAO {
         }
     }
 
-    deleteQuestion(id) {
-        client.connect();
-        client.query('DELETE from question where quest_id = ?', [id], (error) =>
+    deleteQuestion(question) {
+        this.client.connect();
+        this.client.query('DELETE from question where quest_id = ?', [question.id], (error) =>
         {
             if(error) {
                 this.client.end();
@@ -95,40 +122,47 @@ class QuestionDAO {
         })
     }
 
-    addAnswer(question_id, answer_id) {
-        client.connect();
-        client.query('INSERT into question_answer(quest_id, ans_id) values (?, ?)', [question_id, answer_id], (error) =>
+    addAnswer(question, answer) {
+        this.client.connect();
+        this.client.query('INSERT into question_answer(quest_id, ans_id) values (?, ?)', [question.id, answer.id], (error) =>
         {
             if(error) {
                 this.client.end();
                 throw error;
             }
             this.client.end();
+            question.answers.push(answer)
         })
     }
 
-    removeAnswer(question_id, answer_id) {
-        client.connect();
-        client.query('DELETE from question_answer where quest_id = ? and ans_id = ?', [question_id, answer_id], (error) =>
+    removeAnswer(question, answer) {
+        this.client.connect();
+        this.client.query('DELETE from question_answer where quest_id = ? and ans_id = ?', [question.id, answer.id], (error) =>
         {
             if(error) {
                 this.client.end();
                 throw error;
             }
             this.client.end();
-        })
-    }
-
-    changeCorrectAnswer(question_id, answer_id) {
-        client.connect();
-            client.query('UPDATE question set correct_ans = ? where quest_id = ?', [answer_id, question_id], (error) =>
-            {
-                if(error) {
-                    this.client.end();
-                    throw error;
+            for(let i = 0; i < question.answers.length; i++) {
+                if(question.answers[i].id == answer.id) {
+                    question.answers.splice()
                 }
+            }
+        })
+    }
+
+    setCorrectAnswer(question, answer) {
+        this.client.connect();
+        this.client.query('UPDATE question set correct_ans = ? where quest_id = ?', [answer.id, question.id], (error) =>
+        {
+            if(error) {
                 this.client.end();
-            })
+                throw error;
+            }
+            this.client.end();
+            question.correct_ans = answer.id;
+        })
     }
 }
 
