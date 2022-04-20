@@ -4,7 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // test requires
-const example = require('./example');
+// const example = require('./example');
 const db = require('./sql/index');
 
 // express and ejs module imports
@@ -41,7 +41,7 @@ app.get('/test/:testId', async (req, res) => {
 	const { rows: test } = await db.query(queryString1, [testId]);
 
 	const queryString2 =
-		'SELECT quest_text, ans_text FROM	test NATURAL JOIN test_question NATURAL	JOIN question	JOIN answer ON question.correct_ans = answer.ans_id WHERE	test_id = $1;';
+		'SELECT quest_text, ans_text FROM test NATURAL JOIN test_question NATURAL JOIN question JOIN answer ON question.correct_ans = answer.ans_id WHERE test_id = $1;';
 	const { rows: correctAnswers } = await db.query(queryString2, [testId]);
 
 	// extracts question names from query and pushes them to questNames array
@@ -79,11 +79,12 @@ app.get('/test/:testId', async (req, res) => {
 		testContent: questWithAnswers,
 		testName: test[0].test_name,
 		correctAnswers: correctAnswerArray,
+		testId: test[0].test_id
 	});
 
 });
 
-// render test edit page
+// Edit Test Page
 app.get('/edit_test/:testName', (req, res) => {
 	const { testName } = req.params;
 	res.redirect('/');
@@ -92,7 +93,7 @@ app.get('/edit_test/:testName', (req, res) => {
 // Score Page
 app.get('/scores', async (req, res) => {
 	const queryString =
-		'SELECT test_name, student_name, score.score FROM score NATURAL JOIN test;';
+		'SELECT test_name, student_name, score.score FROM score NATURAL JOIN test order by score_id;';
 	const { rows: scores } = await db.query(queryString);
 
 	res.render('scores', { scores: scores });
@@ -100,16 +101,17 @@ app.get('/scores', async (req, res) => {
 
 // insert score into db from test page
 app.post('/scoreSubmit', async (req, res) => {
-	const { scoreDisplay, name } = req.body;
+	const { scoreDisplay, name, test_id } = req.body;
+	console.log(req.body)
 	let score = scoreDisplay.slice(0, -1);
 
-	const queryString = 'INSERT INTO score VALUES(1, $1, $2)';
-	const { rows } = await db.query(queryString, [name, score]);
+	const queryString = 'INSERT INTO score (test_id, student_name, score) VALUES($1, $2, $3)';
+	const { rows } = await db.query(queryString, [test_id, name, score]);
 
-	res.redirect('/');
+	res.redirect('/scores');
 });
 
-// catch all render index
+// Catch All Redirect To Index
 app.all('*', (req, res) => {
 	res.redirect('/');
 });
