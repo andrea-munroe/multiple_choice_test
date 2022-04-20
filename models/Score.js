@@ -1,48 +1,10 @@
 class Score {
-    constructor(name, score = 0, testId) {
-        this.setName(name);
-        this.setScore(score);
-        this.testId = testId;
-        //this.setTestName(testName);
-    }
-
-    setName(name) {
-        if(name != "" && name != undefined) {
-            this.name = name;
-        }
-        else {
-            console.log("Invalid string");
-            //raise an exception
-        }
-    }
-
-    setScore(score) {
+    constructor(score_id, name, score = 0, testId) {
+        this.score_id = score_id;
+        this.name = name;
         this.score = score;
-    }
-
-    // setTestName(testName) {
-    //     if(testName != "" && testName != undefined) {
-    //         this.testName = testName;
-    //     }
-    //     else {
-    //         console.log("Invalid string");
-    //         //raise an exception
-    //     }
-    // }
-
-    getName() {
-        return this.name;
-    }
-
-    getScore() {
-        return this.score;
-    }
-
-    // getTestName() {
-    //     return this.testName;
-    // }
-
-    getTestId() {
-        return this.testId;
+        this.testId = testId;
     }
 }
+
+export default Score

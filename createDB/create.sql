@@ -44,9 +44,9 @@ CREATE TABLE
 
 CREATE TABLE
     score (
+        score_id SERIAL PRIMARY KEY,
         test_id INT,
         student_name VARCHAR(50) NOT NULL,
         score INT NOT NULL CHECK (score <= 100 AND score >= 0),
-        PRIMARY KEY (test_id, student_name, score),
         FOREIGN KEY (test_id) REFERENCES test (test_id) ON DELETE CASCADE
     );

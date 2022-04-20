@@ -33,6 +33,7 @@ app.get('/', async (req, res) => {
 
 // Test Page
 app.get('/test/:testId', async (req, res) => {
+
 	const { testId } = req.params;
 
 	const queryString1 =
@@ -79,6 +80,7 @@ app.get('/test/:testId', async (req, res) => {
 		testName: test[0].test_name,
 		correctAnswers: correctAnswerArray,
 	});
+
 });
 
 // render test edit page
