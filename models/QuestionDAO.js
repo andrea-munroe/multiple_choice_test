@@ -166,4 +166,4 @@ class QuestionDAO {
     }
 }
 
-const QuestionDAO = require('./QuestionDAO');
+module.exports = QuestionDAO;

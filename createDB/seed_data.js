@@ -1,5 +1,5 @@
-import AnswerDAO from "../models/AnswerDAO"
-import QuestionDAO from "../models/QuestionDAO";
+const AnswerDAO = require('../models/AnswerDAO');
+const QuestionDAO = require('../models/QuestionDAO');
 
 let ansDAO = new AnswerDAO()
 ansDAO.addAnswer("True", (answer) => {
