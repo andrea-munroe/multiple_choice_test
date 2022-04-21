@@ -22,7 +22,7 @@ CREATE TABLE
 CREATE TABLE
     test (
         test_id SERIAL PRIMARY KEY,
-        test_name VARCHAR(255) NOT NULL
+        test_name VARCHAR(255) NOT NULL,
 	due_date timestamp DEFAULT set_due()
     );
 
@@ -72,7 +72,7 @@ CREATE OR REPLACE FUNCTION get_timestamp()
 	RETURNS trigger as $$
 	BEGIN
 		IF (SELECT NOW()) > (SELECT due_date FROM test WHERE NEW.test_id = test.test_id) THEN
-			UPDATE score SET late=FALSE;
+			UPDATE score SET late=FALSE  WHERE score_id = NEW.score_id;
 		END IF;
 		RETURN NEW;
 	END;
