@@ -50,3 +50,23 @@ CREATE TABLE
         score INT NOT NULL CHECK (score <= 100 AND score >= 0),
         FOREIGN KEY (test_id) REFERENCES test (test_id) ON DELETE CASCADE
     );
+
+CREATE OR REPLACE FUNCTION update_correct_ans()
+	RETURNS TRIGGER AS $$ 
+	BEGIN
+		IF NEW.correct_ans NOT IN (SELECT ans_id FROM question_answer 
+		WHERE quest_id = NEW.quest_id)  THEN
+			--INSERT INTO question_answer VALUES (NEW.quest_id, NEW.correct_ans);
+			UPDATE question SET correct_ans = OLD.correct_ans WHERE quest_id = OLD.quest_id;
+		END IF;
+		RETURN NEW;
+	END;
+	$$
+	LANGUAGE 'plpgsql';
+
+
+CREATE TRIGGER correct_ans_trigger
+	AFTER UPDATE ON question
+	FOR EACH ROW
+	EXECUTE PROCEDURE update_correct_ans();
+--DROP TRIGGER correct_ans_trigger ON question;
