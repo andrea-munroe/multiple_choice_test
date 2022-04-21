@@ -35,6 +35,7 @@ app.get('/', async (req, res) => {
 app.get('/test/:testId', async (req, res) => {
 
 	const { testId } = req.params;
+	console.log(req.params);
 
 	const queryString1 =
 		'SELECT * FROM test natural join test_question natural join question natural join question_answer natural join answer Where test_id = $1;';
