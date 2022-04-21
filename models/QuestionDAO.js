@@ -1,57 +1,51 @@
+const { connectionString } = require('pg/lib/defaults');
 const AnswerDAO = require('./AnswerDAO');
 const Question = require('./Question');
 
 class QuestionDAO {
     constructor() {
-       // loads connection data from .env file
-        if (process.env.NODE_ENV !== "production") {
-            require('dotenv').config();
-        };
+        const { Pool } = require('pg')
+        require('dotenv').config({ path: '../.env' });
+        this.pool = new Pool();
 
-        const { Client } = require('pg');
-        this.client = new Client({
-            host: process.env.PGHOST,
-            port: process.env.PGPORT,
-            user: process.env.PGUSER,
-            password: process.env.PGPASSWORD,
-            database: process.env.PGDATABASE,
-        });
         this.ansDAO = new AnswerDAO();
     }
 
     getQuestion(id, callback) {
-        this.client.connect();
-        this.client.query('SELECT quest_text, correct_ans from question where quest_id = ?', [id], (error, results) =>
-        {
-            if(error) {
-                this.client.end();
-                throw error;
-            }
-            this.client.end();
-            //Is there any way to enforce this?
-            let question = new Question(id, results.rows[0].quest_text, null, results.rows[0].correct_ans)
-            this.ansDAO.getAllAnswers(question);
-            callback(question);
-        })
+        const query = async() => {
+            const sql = 'SELECT quest_text, correct_ans from question where quest_id = $1'
+            const { rows:quest } = await this.pool.query(sql, [id])
+            this.ansDAO.getAllAnswers(id, (answers) => {
+                callback(new Question(id, quest[0].quest_text, answers, quest[0].correct_ans))
+            })
+        }
+        query()
     }
 
-    getAllQuestions(test) {
-        this.client.connect();
-        this.client.query('SELECT quest_id from question', (error, results) =>
-        {
-            if(error) {
-                this.client.end();
-                throw error;
-            }
-            this.client.end();
-            let questions = []
-            for(let i=0; i < results.rows.length; i++) {
-                this.getQuestion(results.rows[i].quest_id, (question) => {
-                    questions.push(question);
+    getAllQuestions(test_id, callback) {
+        
+        const query = async() => {
+            const questions = []
+            const sql = 'SELECT quest_id, quest_text, correct_ans from question natural join test_question where test_id = $1'
+            const { rows: quest } = await this.pool.query(sql, [test_id])
+            //console.log(quest)
+            quest.forEach((elm) => {
+                    //console.log("elm", elm)
+                    //console.log(elm.quest_id)
+                    this.ansDAO.getAllAnswers(elm.quest_id, (answers) => {
+                        //console.log(elm)
+                        questions.push(new Question(elm.quest_id, elm.quest_text, answers, elm.correct_ans));
+                        if(quest[quest.length-1] == elm && questions.length == quest.length) {
+                            callback(questions)
+                        }
+                        
                 })
-            }
-            callback(questions);
-        })
+                
+            })
+            
+            //console.log(ans)
+        }
+        query()
     }
 
     addQuestion(text, callback) {
@@ -149,3 +143,15 @@ class QuestionDAO {
 }
 
 module.exports = QuestionDAO;
+
+
+const dao = new QuestionDAO()
+
+// dao.getQuestion(1, (question) => {
+//     console.log(question)
+//     console.log(question.getCorrectAnswer())
+// })
+
+dao.getAllQuestions(1, (questions) => {
+    console.log(questions[1].answers[1])
+})

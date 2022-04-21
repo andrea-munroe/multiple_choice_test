@@ -10,8 +10,8 @@ class Question {
     }
 
     getCorrectAnswer() {
-        for(i = 0; i < this.answers.length; i++) {
-            if( this.answers[i].getId() == this.correct_ans) {
+        for(let i = 0; i < this.answers.length; i++) {
+            if( this.answers[i].id == this.correct_ans) {
                 return this.answers[i]
             }
         }
