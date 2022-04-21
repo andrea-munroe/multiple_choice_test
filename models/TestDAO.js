@@ -1,5 +1,5 @@
-import QuestionDAO from "./QuestionDAO";
-import Test from "./Test";
+const QuestionDAO = require('./QuestionDAO');
+const Test = require('./Test');
 
 class TestDAO {
     constructor() {
@@ -154,4 +154,4 @@ class TestDAO {
     }
 }
 
-export default TestDAO;
+module.exports = TestDAO;

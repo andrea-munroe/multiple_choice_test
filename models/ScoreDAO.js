@@ -1,4 +1,4 @@
-import Score from "./Score";
+const Score = require('./Score');
 
 class ScoreDAO {
     constructor() {
@@ -80,4 +80,4 @@ class ScoreDAO {
     }
 }
 
-export default ScoreDAO;
+module.exports =  ScoreDAO;

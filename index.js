@@ -102,7 +102,6 @@ app.get('/scores', async (req, res) => {
 // insert score into db from test page
 app.post('/scoreSubmit', async (req, res) => {
 	const { scoreDisplay, name, test_id } = req.body;
-	console.log(req.body)
 	let score = scoreDisplay.slice(0, -1);
 
 	const queryString = 'INSERT INTO score (test_id, student_name, score) VALUES($1, $2, $3)';

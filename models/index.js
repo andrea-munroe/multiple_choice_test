@@ -1,15 +1,13 @@
-import Answer from "./Answer";
-import AnswerDAO from "./AnswerDAO";
-import Question from "./Question";
-import QuestionDAO from "./QuestionDAO";
-import Test from "./Test";
-import TestDAO from "./TestDAO";
+const Answer = require('./Answer');
+const AnswerDAO = require('./AnswerDAO');
+const Question = require('./Question');
+const QuestionDAO = require('./QuestionDAO');
+const Test = require('./Test');
+const TestDAO = require('./TestDAO');
 
-export default {
-    Answer,
-    AnswerDAO,
-    Question,
-    QuestionDAO,
-    Test,
-    TestDAO
-}
+module.exports = Answer;
+module.exports = AnswerDAO;
+module.exports = Question;
+module.exports = QuestionDAO;
+module.exports = Test;
+module.exports = TestDAO;

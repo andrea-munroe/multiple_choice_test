@@ -5,4 +5,4 @@ class Answer {
     }
 }
 
-export default Answer
+module.exports = Answer;
