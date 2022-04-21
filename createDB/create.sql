@@ -58,6 +58,7 @@ CREATE OR REPLACE FUNCTION update_correct_ans()
 		WHERE quest_id = NEW.quest_id)  THEN
 			--INSERT INTO question_answer VALUES (NEW.quest_id, NEW.correct_ans);
 			UPDATE question SET correct_ans = OLD.correct_ans WHERE quest_id = OLD.quest_id;
+			RAISE NOTICE 'New correct_ans is not an answer for question. Add answer to question_answer and try again.';
 		END IF;
 		RETURN NEW;
 	END;
