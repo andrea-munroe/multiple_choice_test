@@ -19,25 +19,6 @@ class QuestionDAO {
         this.ansDAO = new AnswerDAO();
     }
 
-    getQuestionAnswers(id, callback) {
-        this.client.connect();
-        this.client.query('SELECT ans_id from question_answer where quest_id = ?', [id], (error, results) =>
-        {
-            if(error) {
-                this.client.end();
-                throw error;
-            }
-            this.client.end();
-            let answers = [];
-            for(let i = 0; i < results.rows.length; i++) {
-                this.ansDAO.getAnswer(results.rows[i].ans_id, (answer) => {
-                    answers.push(answer);
-                })
-            }
-            callback(answers)
-        })
-    }
-
     getQuestion(id, callback) {
         this.client.connect();
         this.client.query('SELECT quest_text, correct_ans from question where quest_id = ?', [id], (error, results) =>
@@ -47,15 +28,14 @@ class QuestionDAO {
                 throw error;
             }
             this.client.end();
+            //Is there any way to enforce this?
             let question = new Question(id, results.rows[0].quest_text, null, results.rows[0].correct_ans)
-            this.getQuestionAnswers(id, (answers) => {
-                question.answers = answers;
-            })
+            this.ansDAO.getAllAnswers(question);
             callback(question);
         })
     }
 
-    getAllQuestions(callback) {
+    getAllQuestions(test) {
         this.client.connect();
         this.client.query('SELECT quest_id from question', (error, results) =>
         {
@@ -122,6 +102,7 @@ class QuestionDAO {
         })
     }
 
+    //move to answerDAO
     addAnswer(question, answer) {
         this.client.connect();
         this.client.query('INSERT into question_answer(quest_id, ans_id) values (?, ?)', [question.id, answer.id], (error) =>
@@ -135,6 +116,7 @@ class QuestionDAO {
         })
     }
 
+    //move to answerDAO
     removeAnswer(question, answer) {
         this.client.connect();
         this.client.query('DELETE from question_answer where quest_id = ? and ans_id = ?', [question.id, answer.id], (error) =>
