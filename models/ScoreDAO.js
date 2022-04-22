@@ -7,6 +7,7 @@ class ScoreDAO {
         this.pool = new Pool();
     }
 
+    //returns a Score object which matches information in the database.
     getScore(id, callback) {
         const query = async() => {
             const sql = 'SELECT test_id, student_name, score from score where score_id = $1'
@@ -16,6 +17,7 @@ class ScoreDAO {
         query()
     }
 
+    //returns a list of all Score objects representing all of the scores in the database.
     getAllScores(callback) {
         const query = async() => {
             const scores = []
@@ -31,6 +33,7 @@ class ScoreDAO {
         query()
     }
 
+    //Adds a new score to the database and returns a Score object matching that information
     addScore(name, score, test_id, callback) {
         const query = async() => {
             const sql = 'INSERT into score(student_name, score, test_id) values ($1, $2, $3) returning score_id'
@@ -40,6 +43,7 @@ class ScoreDAO {
         query() 
     }
 
+    //deletes a score object from the database.
     deleteScore(score_id) {
         const query = async() => {
             const sql = 'DELETE from score where score_id = $1'
