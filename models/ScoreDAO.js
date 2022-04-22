@@ -2,81 +2,50 @@ const Score = require('./Score');
 
 class ScoreDAO {
     constructor() {
-        // loads connection data from .env file
-        if (process.env.NODE_ENV !== "production") {
-            require('dotenv').config();
-        };
-
-        const { Client } = require('pg');
-        this.client = new Client({
-            host: process.env.PGHOST,
-            port: process.env.PGPORT,
-            user: process.env.PGUSER,
-            password: process.env.PGPASSWORD,
-            database: process.env.PGDATABASE,
-        });
+        const { Pool } = require('pg')
+        require('dotenv').config({ path: '../.env' });
+        this.pool = new Pool();
     }
 
     getScore(id, callback) {
-        this.client.connect();
-        this.client.query('SELECT test_id, student_name, score from score where score_id = ?', [id], (error, results) =>
-        {
-            if(error) {
-                this.client.end();
-                throw error;
-            }
-            this.client.end();
-            callback(new Score(id, results.rows[0].student_name, results.rows[0].score, results.rows[0].test_id));
-        })
+        const query = async() => {
+            const sql = 'SELECT test_id, student_name, score from score where score_id = $1'
+            const { rows:score } = await this.pool.query(sql, [id])
+            callback(new Score(id, score[0].student_name, score[0].score, score[0].test_id))
+        }
+        query()
     }
 
     getAllScores(callback) {
-        this.client.connect();
-        this.client.query('SELECT score_id from score', (error, results) =>
-        {
-            if(error) {
-                this.client.end();
-                throw error;
-            }
-            this.client.end();
-            let scores = [];
-            for(let i=0; i < results.rows.length; i++) {
-                this.getScore(results.rows[i].score_id, (score) => {
-                    scores.push(score);
-                })
-            }
-            callback(scores);
-        })
-    }
-
-    addScore(name, score, test, callback) {
-        if(name != "" && name != undefined && score >= 0) {
-            this.client.connect();
-            this.client.query('INSERT into score(test_id, student_name, score) values (?, ?, ?) returning score_id', [test.id, name, score], (error, results) =>
-            {
-                if(error) {
-                    this.client.end();
-                    throw error;
-                }
-                this.client.end();
-                callback(new Score(results.rows[0].score_id, name, score, test.id));
+        const query = async() => {
+            const scores = []
+            const sql = 'SELECT score_id, test_id, student_name, score from score'
+            const { rows: score } = await this.pool.query(sql)
+            //may have to rework this for each by adding an if statment to it like question and test dao
+            //Do this if it isn't wanting to return anything.
+            score.forEach((elm) => {
+                scores.push(new Score(elm.score_id, elm.student_name, elm.score, elm,test_id))
             })
-        } else {
-            console.log("invalid string");
-            //raise exception
+            callback(scores)
         }
+        query()
     }
 
-    deleteScore(score) {
-        this.client.connect();
-        this.client.query('DELETE from score where score_id = ?', [score.id], (error) =>
-        {
-            if(error) {
-                this.client.end();
-                throw error;
-            }
-            this.client.end();
-        })
+    addScore(name, score, test_id, callback) {
+        const query = async() => {
+            const sql = 'INSERT into score(student_name, score, test_id) values ($1, $2, $3) returning score_id'
+            const { rows:score1 } = await this.pool.query(sql, [name, score, test_id])
+            callback(new Score(score1[0].score_id, name, score, test_id))
+        }
+        query() 
+    }
+
+    deleteScore(score_id) {
+        const query = async() => {
+            const sql = 'DELETE from score where score_id = $1'
+            const { rows:score } = await this.pool.query(sql, [score_id])
+        }
+        query() 
     }
 }
 
