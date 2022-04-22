@@ -7,6 +7,7 @@ class AnswerDAO {
         this.pool = new Pool();
     }
 
+    //creates an Answer object from database information
     getAnswer(id, callback) {
         const query = async() => {
             const sql = 'SELECT ans_text from answer where ans_id = $1'
@@ -16,6 +17,7 @@ class AnswerDAO {
         query()
     }
 
+    //creates an array of Answer objects from database information for the given question
     getAllAnswers(quest_id, callback) {
         const query = async() => {
             const answers = []
@@ -31,7 +33,7 @@ class AnswerDAO {
         query()
     }
 
-    //May need to pass a question and then instead of returning an answer push it into the question
+    //creates an Answer object and adds that information to the database.
     addAnswer(quest_id, text, callback) {
         const query = async() => {
             const sql = 'INSERT into answer(ans_text) values ($1) returning ans_id'
@@ -39,12 +41,11 @@ class AnswerDAO {
             const { rows:ans_id } = await this.pool.query(sql, [text])
             const { rows:ans } = await this.pool.query(sql2, [quest_id, ans_id[0].ans_id])
             callback(new Answer(ans_id[0].ans_id, text))
-            //callback(new Answer(id, ans_id[0]))
         }
         query()      
     }
         
-    
+    //deletes an answer from the database
     deleteAnswer(id) {
         const query = async() => {
             const sql = 'DELETE from answer where ans_id = $1'
@@ -53,6 +54,7 @@ class AnswerDAO {
         query() 
     }
 
+    //makes the database reflect the information given in the answer object
     updateAnswer(answer) {
         const query = async() => {
             const sql = 'UPDATE answer set ans_text = $1 where ans_id = $2'

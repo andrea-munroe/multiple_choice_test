@@ -11,6 +11,7 @@ class QuestionDAO {
         this.ansDAO = new AnswerDAO();
     }
 
+    //gives you a Question object from database information
     getQuestion(id, callback) {
         const query = async() => {
             const sql = 'SELECT quest_text, correct_ans from question where quest_id = $1'
@@ -22,6 +23,7 @@ class QuestionDAO {
         query()
     }
 
+    //gives you a list of Question objects that belong to the test
     getAllQuestions(test_id, callback) {
         const query = async() => {
             const questions = []
@@ -44,6 +46,7 @@ class QuestionDAO {
         query()
     }
 
+    //adds the given information to the database and returns a Question object.
     addQuestion(text, callback) {
         const query = async() => {
             const sql = 'INSERT into question(quest_text, correct_ans) values ($1, null) returning quest_id'
@@ -53,22 +56,16 @@ class QuestionDAO {
         query()
     }
 
+    //updates the information in the database to match the question given.
     updateQuestion(question) {
         const query = async() => {
             const sql = 'UPDATE question set quest_text = $1, correct_ans = $2 where quest_id = $3'
-            const sql2 = 'DELETE from question_answer where quest_id = $1'
-            const sql3 = 'INSERT into question_answer(quest_id, ans_id) values ($1, $2)'
-            const { rows:quest } = await this.pool.query(sql, [question.quest_text, question.correct_ans, question.quest_id])
-            const { rows:quest2 } = await this.pool.query(sql2, [question.quest_id])
-            if(question.answers != null) {
-                question.answers.forEach(async(elm) => {
-                    const { rows:quest3 } = await this.pool.query(sql3, [question.id, elm.id])
-                })
-            }
+            const { rows:quest } = await this.pool.query(sql, [question.quest_text, question.correct_ans, question.id])
         }
         query()
     }
 
+    //deletes the question from the database.
     deleteQuestion(quest_id) {
         const query = async() => {
             const sql = 'DELETE from question where quest_id = $1'
