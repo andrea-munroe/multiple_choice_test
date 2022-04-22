@@ -87,11 +87,6 @@ app.get('/test/:testId', async (req, res) => {
 app.get('/edit_test/:testId', (req, res) => {
 	const { testId } = req.params;
 	const test = new TestDAO();
-	console.log(testId);
-
-	// test.getTest(testId, (test) => {
-	// 	console.log(test);
-	// });
 
 	res.render('edit_test', { testId });
 });
@@ -100,7 +95,6 @@ app.get('/create_test', async (req, res) => {
 	const quest = new Question();
 	let qlist;
 	quest.getAllQuestions((questions) => {
-		// console.log(questions);
 		res.render('create_test', { questions: questions });
 	});
 });
@@ -132,6 +126,37 @@ app.post('/delete_test', async (req, res) => {
 	tDao.deleteTest(test_id, () => {
 		res.redirect('/');
 	});
+});
+
+app.get('/edit_question/:quest_id', async (req, res) => {
+	const qDao = new Question();
+	const { quest_id } = req.params;
+
+	qDao.getQuestion(quest_id, (question) => {
+		res.render('edit_question', { question: question });
+	});
+});
+
+app.post('/updated_question', async (req, res) => {
+	const aDao = new Answer();
+	console.log(req.body);
+	const { quest_id, question, add_answer } = req.body;
+	delete req.body.quest_id;
+	delete req.body.question;
+	delete req.body.add_answer;
+
+	aDao.addAnswer(quest_id, add_answer, (answer) => {
+		console.log(answer)
+	});
+
+	aDao.deleteAnswer()
+
+	const sql = 'UPDATE answer set ans_text = $1 where ans_id = $2';
+	Object.keys(req.body).forEach((elm) => {
+		const { rows } = db.query(sql, [req.body[elm], elm]);
+	});
+
+	res.redirect('/');
 });
 
 // Score Page

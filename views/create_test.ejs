@@ -21,17 +21,22 @@
 			</div>
 			<nav class="btn-group btn-group-sm my-auto" role="group" aria-label="nav group">
 				<a class="btn btn-primary" href="/">Home</a>
+				<a class="btn btn-secondary" href="/">New Question</a>
 			</nav>
 		</header>
 
 		<form action="/create_test_use" method="POST">
-			<input type="text" name="test_name" id="test_name" required/>
+			<input class="form-control mb-5" type="text" name="test_name" id="test_name" placeholder="Test Name" required/>
 			<% questions.forEach((question) => { %>
 			<div class="card mb-5">
 				<div class="card-body d-flex justify-content-between">
 					<h5 class="card-title my-auto"><%= question.quest_text%></h5>
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" name="<%= question.id%>" id="<%= question.id%>" value="<%= question.id%>"/>
+					<div class="d-flex align-items-center gap-3">
+						<a class="btn btn-secondary btn-sm" href="/edit_question/<%= question.id%>">Edit</a>
+						<div class="form-check">
+							<label for="<%= question.id%>">Use</label>
+							<input class="form-check-input" type="checkbox" name="<%= question.id%>" id="<%= question.id%>" value="<%= question.id%>"/>
+						</div>
 					</div>
 				</div>
 			</div>
