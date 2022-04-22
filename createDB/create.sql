@@ -5,6 +5,8 @@ DROP TABLE IF EXISTS test;
 DROP TABLE IF EXISTS question;
 DROP TABLE IF EXISTS answer;
 
+
+-- sql functions
 CREATE OR REPLACE FUNCTION update_correct_ans()
 	RETURNS TRIGGER AS $$ 
 	BEGIN
@@ -38,6 +40,9 @@ CREATE OR REPLACE FUNCTION set_due()
 	$$
 	LANGUAGE 'plpgsql';
 
+
+
+-- sql create tables
 CREATE TABLE
     answer (
         ans_id SERIAL PRIMARY KEY,
@@ -52,13 +57,6 @@ CREATE TABLE
         FOREIGN KEY (correct_ans) REFERENCES answer (ans_id) ON DELETE CASCADE
     );
 
-CREATE TABLE
-    test (
-        test_id SERIAL PRIMARY KEY,
-        test_name VARCHAR(255) NOT NULL,
-		due_date timestamp DEFAULT set_due()
-    );
-
 CREATE TABLE 
     question_answer (
         quest_id INT,
@@ -66,7 +64,14 @@ CREATE TABLE
         PRIMARY KEY (quest_id, ans_id),
         FOREIGN KEY (quest_id) REFERENCES question (quest_id) ON DELETE CASCADE,
 		FOREIGN KEY (ans_id) REFERENCES answer (ans_id) ON DELETE CASCADE
-    ); 
+    );
+
+CREATE TABLE
+    test (
+        test_id SERIAL PRIMARY KEY,
+        test_name VARCHAR(255) NOT NULL,
+		due_date timestamp DEFAULT set_due()
+    );
 
 CREATE TABLE 
     test_question (
@@ -87,6 +92,8 @@ CREATE TABLE
         FOREIGN KEY (test_id) REFERENCES test (test_id) ON DELETE CASCADE
     );
 
+
+-- create triggers
 CREATE TRIGGER correct_ans_trigger
 	AFTER UPDATE ON question
 	FOR EACH ROW
