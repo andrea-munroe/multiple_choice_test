@@ -16,7 +16,7 @@ class TestDAO {
         const query = async() => {
             const sql = 'SELECT test_name from test where test_id = $1'
             const { rows:test } = await this.pool.query(sql, [id])
-            this.questDAO.getAllQuestions(id, (questions) => {
+            this.questDAO.getAllTestQuestions(id, (questions) => {
                 callback(new Test(id, test[0].test_name, questions))
             })
         }
