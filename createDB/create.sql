@@ -5,6 +5,39 @@ DROP TABLE IF EXISTS test;
 DROP TABLE IF EXISTS question;
 DROP TABLE IF EXISTS answer;
 
+CREATE OR REPLACE FUNCTION update_correct_ans()
+	RETURNS TRIGGER AS $$ 
+	BEGIN
+		IF NEW.correct_ans NOT IN (SELECT ans_id FROM question_answer 
+		WHERE quest_id = NEW.quest_id)  THEN
+			--INSERT INTO question_answer VALUES (NEW.quest_id, NEW.correct_ans);
+			UPDATE question SET correct_ans = OLD.correct_ans WHERE quest_id = OLD.quest_id;
+			RAISE NOTICE 'New correct_ans is not an answer for question. Add answer to question_answer and try again.';
+		END IF;
+		RETURN NEW;
+	END;
+	$$
+	LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION get_timestamp()
+	RETURNS trigger as $$
+	BEGIN
+		IF (SELECT NOW()) > (SELECT due_date FROM test WHERE NEW.test_id = test.test_id) THEN
+			UPDATE score SET late=FALSE  WHERE score_id = NEW.score_id;
+		END IF;
+		RETURN NEW;
+	END;
+	$$
+	LANGUAGE 'plpgsql';
+	
+CREATE OR REPLACE FUNCTION set_due()
+	RETURNS timestamp as $$
+	BEGIN
+	RETURN NOW() + INTERVAL '7' DAY;
+	END;
+	$$
+	LANGUAGE 'plpgsql';
+
 CREATE TABLE
     answer (
         ans_id SERIAL PRIMARY KEY,
@@ -53,39 +86,6 @@ CREATE TABLE
         score INT NOT NULL CHECK (score <= 100 AND score >= 0),
         FOREIGN KEY (test_id) REFERENCES test (test_id) ON DELETE CASCADE
     );
-
-CREATE OR REPLACE FUNCTION update_correct_ans()
-	RETURNS TRIGGER AS $$ 
-	BEGIN
-		IF NEW.correct_ans NOT IN (SELECT ans_id FROM question_answer 
-		WHERE quest_id = NEW.quest_id)  THEN
-			--INSERT INTO question_answer VALUES (NEW.quest_id, NEW.correct_ans);
-			UPDATE question SET correct_ans = OLD.correct_ans WHERE quest_id = OLD.quest_id;
-			RAISE NOTICE 'New correct_ans is not an answer for question. Add answer to question_answer and try again.';
-		END IF;
-		RETURN NEW;
-	END;
-	$$
-	LANGUAGE 'plpgsql';
-
-CREATE OR REPLACE FUNCTION get_timestamp()
-	RETURNS trigger as $$
-	BEGIN
-		IF (SELECT NOW()) > (SELECT due_date FROM test WHERE NEW.test_id = test.test_id) THEN
-			UPDATE score SET late=FALSE  WHERE score_id = NEW.score_id;
-		END IF;
-		RETURN NEW;
-	END;
-	$$
-	LANGUAGE 'plpgsql';
-	
-CREATE OR REPLACE FUNCTION set_due()
-	RETURNS timestamp as $$
-	BEGIN
-	RETURN NOW() + INTERVAL '7' DAY;
-	END;
-	$$
-	LANGUAGE 'plpgsql';
 
 CREATE TRIGGER correct_ans_trigger
 	AFTER UPDATE ON question
