@@ -91,15 +91,15 @@ app.get('/edit_test/:testId', (req, res) => {
 	res.render('edit_test', { testId });
 });
 
-app.get('/create_test', async (req, res) => {
+app.get('/new_test', async (req, res) => {
 	const quest = new Question();
 	let qlist;
 	quest.getAllQuestions((questions) => {
-		res.render('create_test', { questions: questions });
+		res.render('new_test', { questions: questions });
 	});
 });
 
-app.post('/create_test_use', async (req, res) => {
+app.post('/new_test_post', async (req, res) => {
 	const tDao = new Test();
 	const qdao = new Question();
 
