@@ -15,7 +15,7 @@ CREATE TABLE
     question (
         quest_id SERIAL PRIMARY KEY,
         quest_text text NOT NULL, 
-        correct_ans INT NOT NULL,
+        correct_ans INT,
         FOREIGN KEY (correct_ans) REFERENCES answer (ans_id) ON DELETE CASCADE
     );
 
