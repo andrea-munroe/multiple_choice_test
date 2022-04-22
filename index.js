@@ -31,6 +31,12 @@ app.get('/', async (req, res) => {
 	const queryString = 'SELECT * FROM test';
 	const { rows } = await db.query(queryString);
 
+	const test = new TestDAO();
+
+	test.getAllTests((tests) => {
+		console.log(tests)
+	})
+
 	res.render('index', { tests: rows });
 });
 
@@ -98,7 +104,6 @@ app.get('/edit_test/:testId', (req, res) => {
 
 app.get('/create_test', async(req,res)=>{
 	const question = new Question();
-	question.getAllQuestions()
 })
 
 // Score Page
