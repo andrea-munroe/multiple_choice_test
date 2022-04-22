@@ -24,11 +24,34 @@ class QuestionDAO {
     }
 
     //gives you a list of Question objects that belong to the test
-    getAllQuestions(test_id, callback) {
+    getAllTestQuestions(test_id, callback) {
         const query = async() => {
             const questions = []
             const sql = 'SELECT quest_id, quest_text, correct_ans from question natural join test_question where test_id = $1'
             const { rows: quest } = await this.pool.query(sql, [test_id])
+            //console.log(quest)
+            if (quest.length != 0) {
+                quest.forEach((elm) => {
+                    this.getQuestion(elm.quest_id, (question) => {
+                        questions.push(question)
+                        if(questions.length == quest.length) {
+                            callback(questions)
+                        }
+                    }) 
+                })
+            } else {
+                callback(questions)
+            }
+        }
+        query()
+    }
+
+    //returns a list of Question objects which represents all questions in the database.
+    getAllQuestions(callback) {
+        const query = async() => {
+            const questions = []
+            const sql = 'SELECT quest_id, quest_text, correct_ans from question'
+            const { rows: quest } = await this.pool.query(sql)
             //console.log(quest)
             if (quest.length != 0) {
                 quest.forEach((elm) => {
