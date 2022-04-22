@@ -28,14 +28,18 @@ class QuestionDAO {
             const sql = 'SELECT quest_id, quest_text, correct_ans from question natural join test_question where test_id = $1'
             const { rows: quest } = await this.pool.query(sql, [test_id])
             //console.log(quest)
-            quest.forEach((elm) => {
-                this.getQuestion(elm.quest_id, (question) => {
-                    questions.push(question)
-                    if(questions.length == quest.length) {
-                        callback(questions)
-                    }
-                }) 
-            })
+            if (quest.length != 0) {
+                quest.forEach((elm) => {
+                    this.getQuestion(elm.quest_id, (question) => {
+                        questions.push(question)
+                        if(questions.length == quest.length) {
+                            callback(questions)
+                        }
+                    }) 
+                })
+            } else {
+                callback(questions)
+            }
         }
         query()
     }
@@ -44,7 +48,7 @@ class QuestionDAO {
         const query = async() => {
             const sql = 'INSERT into question(quest_text, correct_ans) values ($1, null) returning quest_id'
             const { rows:quest } = await this.pool.query(sql, [text])
-            callback(new Question(quest[0].quest_id, text, null, null))
+            callback(new Question(quest[0].quest_id, text, [], null))
         }
         query()
     }
@@ -58,11 +62,9 @@ class QuestionDAO {
             const { rows:quest2 } = await this.pool.query(sql2, [question.quest_id])
             if(question.answers != null) {
                 question.answers.forEach(async(elm) => {
-                    const { rows:quest3 } = await this.pool.query(sql3, [question.quest_id, elm.ans_id])
-                    console.log(question)
+                    const { rows:quest3 } = await this.pool.query(sql3, [question.id, elm.id])
                 })
             }
-            
         }
         query()
     }
@@ -79,8 +81,8 @@ class QuestionDAO {
 module.exports = QuestionDAO;
 
 
-const qdao = new QuestionDAO()
-const adao = new AnswerDAO()
+//const qdao = new QuestionDAO()
+//const adao = new AnswerDAO()
 
 // qdao.getQuestion(1, (question) => {
 //     console.log(question)

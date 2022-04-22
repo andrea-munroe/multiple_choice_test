@@ -1,3 +1,4 @@
+const AnswerDAO = require('./AnswerDAO');
 const QuestionDAO = require('./QuestionDAO');
 const Test = require('./Test');
 
@@ -10,120 +11,108 @@ class TestDAO {
         this.questDAO = new QuestionDAO();
     }
 
-        getTest(id, callback) {
-        this.client.connect();
-        this.client.query('SELECT test_name from test where test_id = ?', [id], (error, results) =>
-        {
-            if(error) {
-                this.client.end();
-                throw error;
-            }
-            this.client.end();
-            let test = new Test(id, results.rows[0].test_name)
-            this.getTestQuestions(id, (questions) => {
-                test.questions = questions;
+    getTest(id, callback) {
+        const query = async() => {
+            const sql = 'SELECT test_name from test where test_id = $1'
+            const { rows:test } = await this.pool.query(sql, [id])
+            this.questDAO.getAllQuestions(id, (questions) => {
+                callback(new Test(id, test[0].test_name, questions))
             })
-
-            callback(test);
-        })
+        }
+        query()
     }
 
     getAllTests(callback) {
-        this.client.connect();
-        this.client.query('SELECT test_name from test', (error, results) =>
-        {
-            if(error) {
-                this.client.end();
-                throw error;
-            }
-            this.client.end();
-            let tests = [];
-            for(let i=0; i < results.rows.length; i++) {
-                this.getTest(results.rows[i].test_id, (test) => {
-                    tests.push(test);
+        const query = async() => {
+            const tests = []
+            const sql = 'SELECT test_id, test_name from test'
+            const { rows: test1 } = await this.pool.query(sql)
+            if (test1.length != 0 ){
+                    test1.forEach((elm) => {
+                    this.getTest(elm.test_id, (test) => {
+                        tests.push(test)
+                        if(tests.length == test1.length) {
+                            callback(tests)
+                        }
+                    }) 
                 })
+            } else {
+                callback(tests)
             }
-            callback(tests);
-        })
+        }
+        query()
     }
 
     addTest(test_name, callback) {
-        if(test_name != "" && test_name != undefined) {
-            this.client.connect();
-            this.client.query('INSERT into test(test_name) values (?) returning test_id', [test_name], (error, results) =>
-            {
-                if(error) {
-                    this.client.end();
-                    throw error;
-                }
-                this.client.end();
-                callback(new Test(results.rows[0].test_id, test_name));
-            })
-        } else {
-            console.log("Invalid string");
-            //raise exception
+        const query = async() => {
+            const sql = 'INSERT into test(test_name) values ($1) returning test_id'
+            const { rows:test } = await this.pool.query(sql, [test_name])
+            callback(new Test(test[0].test_id, test_name, []))
         }
+        query()
     }
     
-    updateTestName(test, text) {
-        if(text != "" && text != undefined) {
-            this.client.connect();
-            this.client.query('UPDATE test set test_name = ? where test_id = ?', [text, test.id], (error) =>
-            {
-                if(error) {
-                    this.client.end();
-                    throw error;
-                }
-                this.client.end();
-                test.test_name = text;
-            })
-        } else {
-            console.log("Invalid string");
-            //raise exception
+    updateTest(test) {
+        const query = async() => {
+            const sql = 'UPDATE test set test_name = $1 where test_id = $2'
+            const sql2 = 'DELETE from test_question where test_id = $1'
+            const sql3 = 'INSERT into test_question (test_id, quest_id) values ($1, $2)'
+            const { rows:test1 } = await this.pool.query(sql, [test.test_name, test.id])
+            const { rows:test2 } = await this.pool.query(sql2, [test.test_id])
+            if(test.questions != null) {
+                test.questions.forEach(async(elm) => {
+                    const { rows:test3 } = await this.pool.query(sql3, [test.id, elm.id])
+                })
+            }
         }
+        query()
     }
 
-    deleteTest(test) {
-        this.client.connect();
-        this.client.query('DELETE from test where test_id = ?', [test.id], (error) =>
-        {
-            if(error) {
-                this.client.end();
-                throw error;
-            }
-            this.client.end();
-        })
-    }
-
-    addQuestion(test, question) {
-        this.client.connect();
-        this.client.query('INSERT into test_question(test_id, quest_id) values (?, ?)', [test.id, question.id], (error) =>
-        {
-            if(error) {
-                this.client.end();
-                throw error;
-            }
-            this.client.end();
-            test.questions.push(question);
-        })
-    }
-
-    removeQuestion(test, question) {
-        this.client.connect();
-        this.client.query('DELETE from test_question where test_id = ? and quest_id = ?', [test.id, question.id], (error) =>
-        {
-            if(error) {
-                this.client.end();
-                throw error;
-            }
-            this.client.end();
-            for(let i = 0; i < test.questions.length; i++) {
-                if(test.questions[i].id == question.id) {
-                    test.questions.splice()
-                }
-            }
-        })
+    deleteTest(test_id) {
+        const query = async() => {
+            const sql = 'DELETE from test where test_id = $1'
+            const { rows:test } = await this.pool.query(sql, [test_id])
+        }
+        query()
     }
 }
 
 module.exports = TestDAO;
+
+
+const tdao = new TestDAO()
+const qdao = new QuestionDAO()
+const adao = new AnswerDAO()
+
+// tdao.getTest(14, (test) => {
+//     console.log(test) // prints the entire test
+//     //console.log(test.questions[1]) //prints out the question in position 1
+//     //console.log(test.questions[1].answers[1].ans_text) //prints the answer in position 1 for the question in position 1
+// })
+
+tdao.addTest("Awesome Test now with correct answers", (test) => {
+    console.log(test)
+    qdao.addQuestion("new question", (question) => {
+        adao.addAnswer(question.id, "Answer1", (answer) => {
+            question.answers.push(answer)
+            question.correct_ans = answer.id
+            console.log(answer.id)
+            adao.addAnswer(question.id, "Answer2", (answer2) => {
+                question.answers.push(answer2)
+                console.log(answer2.id)
+                console.log(question.answers)
+                qdao.updateQuestion(question)
+                test.questions.push(question)
+                tdao.updateTest(test)
+            })
+        })
+    })
+})
+
+// tdao.getAllTests((tests) => {
+//     console.log(tests)
+// })
+
+// tdao.getTest(5, (test) => {
+//     console.log(test)
+// })

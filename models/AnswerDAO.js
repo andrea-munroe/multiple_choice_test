@@ -17,17 +17,16 @@ class AnswerDAO {
     }
 
     getAllAnswers(quest_id, callback) {
-
         const query = async() => {
             const answers = []
             const sql = 'SELECT ans_id, ans_text from answer natural join question_answer where quest_id = $1'
             const { rows: ans } = await this.pool.query(sql, [quest_id])
+            //may have to rework this for each by adding an if statment to it like question and test dao
+            //Do this if it isn't wanting to return anything.
             ans.forEach((elm) => {
-                //callback(elm)
                 answers.push(new Answer(elm.ans_id, elm.ans_text))
             })
             callback(answers)
-            //console.log(ans)
         }
         query()
     }
@@ -68,7 +67,7 @@ module.exports =  AnswerDAO;
 
 
 
-const dao = new AnswerDAO();
+//const dao = new AnswerDAO();
 // dao.getAllAnswers(2, (answer) => {
 //     console.log(answer)
 // })
