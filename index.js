@@ -5,7 +5,7 @@ require('dotenv').config();
 const db = require('./sql/index');
 
 //DAOs
-const Answers = require('./models/AnswerDAO');
+const Answer = require('./models/AnswerDAO');
 const Question = require('./models/QuestionDAO');
 const Test = require('./models/TestDAO');
 const Score = require('./models/ScoreDAO');
@@ -30,12 +30,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', async (req, res) => {
 	const queryString = 'SELECT * FROM test';
 	const { rows } = await db.query(queryString);
-
-	const test = new TestDAO();
-
-	test.getAllTests((tests) => {
-		console.log(tests)
-	})
 
 	res.render('index', { tests: rows });
 });
@@ -93,7 +87,7 @@ app.get('/test/:testId', async (req, res) => {
 app.get('/edit_test/:testId', (req, res) => {
 	const { testId } = req.params;
 	const test = new TestDAO();
-	console.log(testId)
+	console.log(testId);
 
 	// test.getTest(testId, (test) => {
 	// 	console.log(test);
@@ -102,9 +96,43 @@ app.get('/edit_test/:testId', (req, res) => {
 	res.render('edit_test', { testId });
 });
 
-app.get('/create_test', async(req,res)=>{
-	const question = new Question();
-})
+app.get('/create_test', async (req, res) => {
+	const quest = new Question();
+	let qlist;
+	quest.getAllQuestions((questions) => {
+		// console.log(questions);
+		res.render('create_test', { questions: questions });
+	});
+});
+
+app.post('/create_test_use', async (req, res) => {
+	const tDao = new Test();
+	const qdao = new Question();
+
+	const qList = Object.keys(req.body).slice(0, -1);
+	const { test_name: testName } = req.body;
+
+	if (qList.length >= 1) {
+		tDao.addTest(testName, (test) => {
+			const { id } = test;
+			const sql = 'Insert into test_question (test_id, quest_id) values($1, $2);';
+			qList.forEach((question) => {
+				const { rows } = db.query(sql, [id, question]);
+			});
+		});
+	}
+
+	res.redirect('/');
+});
+
+app.post('/delete_test', async (req, res) => {
+	const tDao = new Test();
+	const { test_id } = req.body;
+
+	tDao.deleteTest(test_id, () => {
+		res.redirect('/');
+	});
+});
 
 // Score Page
 app.get('/scores', async (req, res) => {

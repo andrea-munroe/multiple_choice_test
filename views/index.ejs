@@ -20,7 +20,7 @@
 			<h1 class="text-light my-auto">Test</h1>
 			<nav class="btn-group btn-group-sm my-auto" role="group" aria-label="nav group">
 				<a class="btn btn-primary" href="scores">Scores</a>
-				<a class="btn btn-secondary" href="#">New Test</a>
+				<a class="btn btn-secondary" href="create_test">New Test</a>
 			</nav>
 		</header>
 
@@ -28,10 +28,14 @@
 		<div class="card mb-5">
 			<div class="card-body d-flex justify-content-between">
 				<h5 class="card-title my-auto"><%= test.test_name %></h5>
+				<form action="/delete_test" method="POST">
 				<div class="btn-group btn-group-sm">
 					<a class="card-link btn btn-primary" href="/test/<%= test.test_id %>">Take Test</a>
 					<a class="card-link btn btn-secondary" href="/edit_test/<%= test.test_id %>">Edit</a>
-				</div>
+						<input type="hidden" name="test_id" value="<%= test.test_id %>">
+					<button class="btn btn-danger btn-sm">Delete</button>
+					</div>
+				</form>
 			</div>
 		</div>
 		<% }) %>
