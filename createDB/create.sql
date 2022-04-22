@@ -5,6 +5,8 @@ DROP TABLE IF EXISTS test;
 DROP TABLE IF EXISTS question;
 DROP TABLE IF EXISTS answer;
 
+
+-- sql functions
 CREATE OR REPLACE FUNCTION update_correct_ans()
 	RETURNS TRIGGER AS $$ 
 	BEGIN
@@ -38,6 +40,9 @@ CREATE OR REPLACE FUNCTION set_due()
 	$$
 	LANGUAGE 'plpgsql';
 
+
+
+-- sql create tables
 CREATE TABLE
     answer (
         ans_id SERIAL PRIMARY KEY,
@@ -52,6 +57,15 @@ CREATE TABLE
         FOREIGN KEY (correct_ans) REFERENCES answer (ans_id) ON DELETE CASCADE
     );
 
+CREATE TABLE 
+    question_answer (
+        quest_id INT,
+        ans_id INT,
+        PRIMARY KEY (quest_id, ans_id),
+        FOREIGN KEY (quest_id) REFERENCES question (quest_id) ON DELETE CASCADE,
+		FOREIGN KEY (ans_id) REFERENCES answer (ans_id) ON DELETE CASCADE
+    );
+
 CREATE TABLE
     test (
         test_id SERIAL PRIMARY KEY,
@@ -60,21 +74,12 @@ CREATE TABLE
     );
 
 CREATE TABLE 
-    question_answer (
-        quest_id INT,
-        ans_id INT,
-        PRIMARY KEY (quest_id, ans_id),
-        FOREIGN KEY (quest_id) REFERENCES question (quest_id) ON DELETE CASCADE,
-		FOREIGN KEY (ans_id) REFERENCES answer (ans_id) ON DELETE CASCADE
-    ); 
-
-CREATE TABLE 
     test_question (
         test_id INT,
         quest_id INT,
         PRIMARY KEY (test_id, quest_id),
-        FOREIGN KEY (test_id) REFERENCES test (test_id),
-        FOREIGN KEY (quest_id) REFERENCES question (quest_id)
+        FOREIGN KEY (test_id) REFERENCES test (test_id) ON DELETE CASCADE,
+        FOREIGN KEY (quest_id) REFERENCES question (quest_id) ON DELETE CASCADE
      );
 
 CREATE TABLE
@@ -87,6 +92,8 @@ CREATE TABLE
         FOREIGN KEY (test_id) REFERENCES test (test_id) ON DELETE CASCADE
     );
 
+
+-- create triggers
 CREATE TRIGGER correct_ans_trigger
 	AFTER UPDATE ON question
 	FOR EACH ROW
