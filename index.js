@@ -129,8 +129,18 @@ app.post('/delete_test', async (req, res) => {
 });
 
 app.get('/new_question', async (req, res) => {
-	res.render('new_question')
-})
+	res.render('new_question');
+});
+
+app.post('/new_question_post', async (req, res) => {
+	console.log(req.body);
+	const qDao = new Question();
+	const aDao = new Answer();
+	const { quest_text, answer_array } = req.body;
+	// qDao.addQuestion(quest_text, (question) => {
+	// 	aDao.addAnswer(question.id,)
+	// })
+});
 
 app.get('/edit_question/:quest_id', async (req, res) => {
 	const qDao = new Question();
