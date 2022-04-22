@@ -3,42 +3,14 @@ const Test = require('./Test');
 
 class TestDAO {
     constructor() {
-        // loads connection data from .env file
-        if (process.env.NODE_ENV !== "production") {
-            require('dotenv').config();
-        };
+        const { Pool } = require('pg')
+        require('dotenv').config({ path: '../.env' });
+        this.pool = new Pool();
 
-        const { Client } = require('pg');
-        this.client = new Client({
-            host: process.env.PGHOST,
-            port: process.env.PGPORT,
-            user: process.env.PGUSER,
-            password: process.env.PGPASSWORD,
-            database: process.env.PGDATABASE,
-        });
         this.questDAO = new QuestionDAO();
     }
 
-    getTestQuestions(id, callback) {
-        this.client.connect();
-        this.client.query('SELECT quest_id from test_question where test_id = ?', [id], (error, results) =>
-        {
-            if(error) {
-                this.client.end();
-                throw error;
-            }
-            this.client.end();
-            let questions = [];
-            for(let i = 0; i < results.rows.length; i++) {
-                this.questDAO.getQuestion(results.rows[i].quest_id, (question) => {
-                    questions.push(question);
-                })
-            }
-            callback(questions);
-        })
-    }
-
-    getTest(id, callback) {
+        getTest(id, callback) {
         this.client.connect();
         this.client.query('SELECT test_name from test where test_id = ?', [id], (error, results) =>
         {
