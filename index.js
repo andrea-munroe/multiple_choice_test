@@ -137,9 +137,21 @@ app.post('/new_question_post', async (req, res) => {
 	const qDao = new Question();
 	const aDao = new Answer();
 	const { quest_text, answer_array } = req.body;
+	const answerArray = [];
+	answer_array.forEach((elm) => {
+		if (elm !== '') {
+			answerArray.push(elm);
+		}
+	});
+
+	console.log(answerArray)
 	// qDao.addQuestion(quest_text, (question) => {
-	// 	aDao.addAnswer(question.id,)
-	// })
+	// 	answerArray.forEach((answer) => {
+	// 		aDao.addAnswer(question.id, answer, () => {
+	// 		});
+	// 		question.correct_answer = 
+	// 	});
+	// });
 });
 
 app.get('/edit_question/:quest_id', async (req, res) => {
