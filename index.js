@@ -128,6 +128,10 @@ app.post('/delete_test', async (req, res) => {
 	});
 });
 
+app.get('/new_question', async (req, res) => {
+	res.render('new_question')
+})
+
 app.get('/edit_question/:quest_id', async (req, res) => {
 	const qDao = new Question();
 	const { quest_id } = req.params;
@@ -145,11 +149,13 @@ app.post('/updated_question', async (req, res) => {
 	delete req.body.question;
 	delete req.body.add_answer;
 
-	aDao.addAnswer(quest_id, add_answer, (answer) => {
-		console.log(answer)
-	});
+	if (add_answer !== '') {
+		aDao.addAnswer(quest_id, add_answer, (answer) => {
+			console.log(answer);
+		});
+	}
 
-	aDao.deleteAnswer()
+	aDao.deleteAnswer();
 
 	const sql = 'UPDATE answer set ans_text = $1 where ans_id = $2';
 	Object.keys(req.body).forEach((elm) => {
