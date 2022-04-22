@@ -1,23 +1,26 @@
 // use .env environment variables
-if (process.env.NODE_ENV !== 'production') {
-	require('dotenv').config();
-}
+require('dotenv').config();
 
 // test requires
-// const example = require('./example');
 const db = require('./sql/index');
+
+//DAOs
+const Answers = require('./models/AnswerDAO');
+const Question = require('./models/QuestionDAO');
+const Test = require('./models/TestDAO');
+const Score = require('./models/ScoreDAO');
 
 // express and ejs module imports
 const express = require('express');
 const app = express();
 const path = require('path');
+const TestDAO = require('./models/TestDAO');
 
 // express logic
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'views')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 // ------------------------ //
 // ------- Routes --------- //
@@ -33,15 +36,12 @@ app.get('/', async (req, res) => {
 
 // Test Page
 app.get('/test/:testId', async (req, res) => {
-
 	const { testId } = req.params;
 
-	const queryString1 =
-		'SELECT * FROM test natural join test_question natural join question natural join question_answer natural join answer Where test_id = $1;';
+	const queryString1 = 'SELECT * FROM test natural join test_question natural join question natural join question_answer natural join answer Where test_id = $1;';
 	const { rows: test } = await db.query(queryString1, [testId]);
 
-	const queryString2 =
-		'SELECT quest_text, ans_text FROM test NATURAL JOIN test_question NATURAL JOIN question JOIN answer ON question.correct_ans = answer.ans_id WHERE test_id = $1;';
+	const queryString2 = 'SELECT quest_text, ans_text FROM test NATURAL JOIN test_question NATURAL JOIN question JOIN answer ON question.correct_ans = answer.ans_id WHERE test_id = $1;';
 	const { rows: correctAnswers } = await db.query(queryString2, [testId]);
 
 	// extracts question names from query and pushes them to questNames array
@@ -79,21 +79,26 @@ app.get('/test/:testId', async (req, res) => {
 		testContent: questWithAnswers,
 		testName: test[0].test_name,
 		correctAnswers: correctAnswerArray,
-		testId: test[0].test_id
+		testId: test[0].test_id,
 	});
-
 });
 
 // Edit Test Page
-app.get('/edit_test/:testName', (req, res) => {
-	const { testName } = req.params;
-	res.redirect('/');
+app.get('/edit_test/:testId', (req, res) => {
+	const { testId } = req.params;
+	const test = new TestDAO();
+	console.log(testId)
+
+	// test.getTest(testId, (test) => {
+	// 	console.log(test);
+	// });
+
+	res.render('edit_test', { testId });
 });
 
 // Score Page
 app.get('/scores', async (req, res) => {
-	const queryString =
-		'SELECT test_name, student_name, score.score FROM score NATURAL JOIN test order by score_id;';
+	const queryString = 'SELECT test_name, student_name, score.score FROM score NATURAL JOIN test order by score_id;';
 	const { rows: scores } = await db.query(queryString);
 
 	res.render('scores', { scores: scores });
