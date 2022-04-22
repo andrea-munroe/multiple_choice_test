@@ -2,8 +2,6 @@
 // require('dotenv').config({ path: '../.env' });
 // pool = new Pool();
 
-
-const db = require('./sql/index');
 class DefaultDAO {
 	constructor() {
 		const { Pool } = require('pg');
