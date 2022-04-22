@@ -96,6 +96,11 @@ app.get('/edit_test/:testId', (req, res) => {
 	res.render('edit_test', { testId });
 });
 
+app.get('/create_test', async(req,res)=>{
+	const question = new Question();
+	question.getAllQuestions()
+})
+
 // Score Page
 app.get('/scores', async (req, res) => {
 	const queryString = 'SELECT test_name, student_name, score.score FROM score NATURAL JOIN test order by score_id;';
