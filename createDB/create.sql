@@ -78,8 +78,8 @@ CREATE TABLE
         test_id INT,
         quest_id INT,
         PRIMARY KEY (test_id, quest_id),
-        FOREIGN KEY (test_id) REFERENCES test (test_id),
-        FOREIGN KEY (quest_id) REFERENCES question (quest_id)
+        FOREIGN KEY (test_id) REFERENCES test (test_id) ON DELETE CASCADE,
+        FOREIGN KEY (quest_id) REFERENCES question (quest_id) ON DELETE CASCADE
      );
 
 CREATE TABLE
