@@ -1,9 +1,9 @@
 nontrivial functional dependencies:
 
 quest_id -> quest_text, correct_ans
-test_id -> test_name
+test_id -> test_name, due_date
 ans_id -> ans_text
-score_id -> test_id, student_name, score
+score_id -> test_id, student_name, score, late
 
 Proof of 3NF:
 
