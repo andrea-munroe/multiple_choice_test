@@ -24,3 +24,5 @@ test_question (test_id, quest_id)
     
 score (test_id, student_name, score)
     score_id is a superkey for score
+
+iudfooi
